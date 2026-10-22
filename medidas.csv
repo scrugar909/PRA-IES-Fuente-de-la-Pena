@@ -1,0 +1,66 @@
+﻿apartado;tipologia;texto
+1;tdah;Fraccionar las tareas en secuencias cortas con pasos intermedios definidos.
+1;tdah;Proporcionar enunciados de tareas concisos, resaltando las palabras clave en negrita.
+1;tdah;Alternar actividades que requieren alta concentración con tareas más manipulativas o dinámicas.
+1;dea_lectura;Simplificación sintáctica de enunciados complejos y apoyos gráficos explicativos.
+1;dea_lectura;Priorizar tareas de respuesta corta, selección múltiple o esquemas sobre amplios desarrollos redactados.
+1;dea_escritura;Permitir respuestas esquemáticas o en formato digital para reducir la fatiga en la copia.
+1;dea_escritura;Proporcionar plantillas con estructura de respuesta guiada o mapas conceptuales semirellenos.
+1;dea_calculo;Uso de problemas contextualizados apoyados en material visual o situaciones cotidianas.
+1;dea_calculo;Descomposición de procedimientos matemáticos complejos en guía paso a paso.
+1;nee_intelectual;Adaptación de actividades a su nivel de competencia curricular con enfoque muy funcional.
+1;nee_intelectual;Actividades con modelado previo por parte del docente e instrucciones altamente guiadas.
+1;nee_tea;Estructuración clara de actividades con listas de verificación visual (inicio, proceso y fin).
+1;nee_tea;Presentación de consignas literales evitando ambigüedades, metáforas o dobles sentidos.
+1;alcain;Proponer actividades de profundización, investigación abierta y retos de pensamiento crítico.
+1;alcain;Diseño de proyectos de transferencia interdisciplinar y síntesis creativa.
+1;ecophe;Actividades con glosarios terminológicos bilingües/de apoyo y vocabulario clave priorizado.
+1;pendientes;Tareas centradas en el cuadernillo de recuperación de contenidos mínimos de cursos anteriores.
+1;pendientes;Ejercicios tipo examen focalizados en los saberes básicos no alcanzados.
+1;repetidor;Actividades de afianzamiento y consolidación de contenidos fundamentales del curso actual.
+1;general;Variedad en la tipología de tareas (ejercicios prácticos, casos reales, indagación y síntesis).
+2;tdah;Combinar la explicación verbal con apoyo visual constante en pizarra o pantalla.
+2;tdah;Asegurar el contacto visual directo y realizar comprobaciones periódicas de comprensión.
+2;dea_lectura;Lectura en voz alta de enunciados e instrucciones por parte del docente o un compañero.
+2;dea_lectura;Uso de fuentes tipográficas claras de fácil lectura (Arial/Calibri), tamaño ampliado (12-14pt) y interlineado holgado.
+2;dea_escritura;Facilitar apuntes, esquemas e infografías previamente elaborados o digitalizados.
+2;nee_sensorial;Adaptación del formato del texto (macrotipos, alto contraste) o soporte auditivo/digital.
+2;nee_sensorial;Uso de sistemas FM/emisora en el aula y subtitulado de material audiovisual.
+2;nee_tea;Uso de apoyos visuales organizados (pictogramas, guías visuales paso a paso).
+2;nee_tea;Anticipación explícita de cambios de rutina o secuencias de trabajo de la sesión.
+2;ecophe;Uso de traductores digitales, diccionarios visuales e ilustraciones explicativas de contexto.
+2;pendientes;Acceso permanente a la guía de pendientes y materiales de estudio en el aula virtual / Google Classroom.
+2;general;Digitalización de materiales y esquemas descargables en la plataforma educativa del centro.
+3;tdah;Organizadores gráficos de tareas, temporizador/cronómetro visual para autogestión del tiempo.
+3;tdah;Uso de listas de chequeo (checklists) para revisión del material e itinerario de clase.
+3;dea_lectura;Uso de regla o guía de lectura, marcapáginas y programas de lectura por síntesis de voz.
+3;dea_calculo;Permitir el uso continuo de tabla pitagórica, tablas de fórmulas y calculadora básica.
+3;dea_calculo;Materiales manipulativos (bloques multibase, rectas numéricas, plantillas de organización gráfica de operaciones).
+3;nee_intelectual;Fichas adaptadas simplificadas con apoyos icónicos y alto contenido manipulativo.
+3;alcain;Plataformas de aprendizaje avanzado, lecturas complejas, laboratorios virtuales y kits de ampliación.
+3;pendientes;Cuadernillo autonómico/departamental de tareas de recuperación con solucionarios guiados.
+3;repetidor;Fichas de refuerzo escalonado con soluciones comentadas y mapas de conceptos clave.
+3;general;Uso de recursos multimedia interactivos, esquemas conceptuales dinámicos y presentaciones visuales.
+4;tdah;Ubicación en las primeras filas, cerca de la mesa del profesor/a y alejado de distractores (ventanas/puertas).
+4;tdah;Flexibilidad en la gestión del tiempo permitiendo descansos activos breves organizados.
+4;dea_lectura;Concesión de tiempo adicional (hasta un 25-50% más) en la realización de lecturas y exámenes.
+4;dea_escritura;Ubicación con un/a compañero/a tutor/a que colabore en la verificación de copia de tareas de la pizarra.
+4;nee_tea;Puesto de trabajo fijo, delimitado y predecible, libre de sobreestimulación sensorial innecesaria.
+4;nee_sensorial;Ubicación en primera fila orientada al docente para facilitar la lectura labiofacial/visión óptima.
+4;alcain;Agrupamientos flexibles: trabajo autónomo de investigación y roles de liderazgo en proyectos cooperativos.
+4;pendientes;Planificación de tutorías periódicas de seguimiento individualizado durante el curso.
+4;general;Alternancia entre trabajo individual enfocado, parejas cooperativas y pequeños grupos de nivel/heterogéneos.
+5;tdah;Exámenes fraccionados en dos partes o realizables en diferentes momentos si es necesario.
+5;tdah;Supervisión del docente al inicio y durante el examen para asegurar que ha comprendido las preguntas.
+5;dea_lectura;Lectura individualizada de los enunciados del examen por parte del docente antes de comenzar.
+5;dea_lectura;Posibilidad de realizar pruebas orales o con soporte digital en sustitución de pruebas escritas.
+5;dea_escritura;No penalización cuantitativa de las faltas de ortografía o grafía derivada de la dificultad específica.
+5;dea_escritura;Permitir formato tipo test, preguntas de completar o de unir con flechas.
+5;dea_calculo;Permitir el uso de calculadora o tablas de apoyo en exámenes donde el objetivo no sea el cálculo mecánico.
+5;nee_intelectual;Pruebas de evaluación adaptadas formalmente en extensión y nivel a sus criterios de evaluación priorizados.
+5;nee_intelectual;Uso prioritario de observación directa, escalas de estimación y carpetas de aprendizaje (portafolio).
+5;nee_tea;Formato de prueba claro, sin preguntas con enunciados redactados de forma ambigua.
+5;alcain;Evaluación mediante rúbricas de producto final, proyectos, autoevaluación y coevaluación exigentemente guiada.
+5;pendientes;Pruebas escritas/prácticas específicas trimestrales combinadas con la valoración del cuadernillo (30-40%).
+5;repetidor;Evaluación continua ponderando progresos de aprendizaje, proyectos prácticos y seguimiento diario.
+5;general;Diversificación de instrumentos: rúbricas de proyectos, listas de cotejo de trabajos y exámenes objetivamente ponderados.

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRA · IES Fuente de la Peña</title>
+<style>
+/* ===== [CSS-1] INTERFAZ (color corporativo: --p) ===== */
+:root{--p:#704090;--pd:#4f2a68;--pl:#f1eaf6}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font:15px/1.4 Arial,Calibri,sans-serif;background:#f6f3f9;color:#222}
+header{background:var(--p);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px}
+header img{height:46px}header h1{font-size:19px;margin:0}
+main{max-width:980px;margin:auto;padding:16px}
+section{background:#fff;border:1px solid #ddd;border-top:4px solid var(--p);border-radius:8px;padding:14px;margin-bottom:14px}
+h2{margin:0 0 8px;font-size:16px;color:var(--pd)}h3{font-size:14px;margin:14px 0 4px}
+label{display:block;font-size:13px;font-weight:bold;margin:6px 0 2px}
+input,select,textarea{width:100%;padding:7px;border:1px solid #bbb;border-radius:5px;font:inherit}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+button{background:var(--p);color:#fff;border:0;border-radius:6px;padding:8px 14px;font:inherit;cursor:pointer}
+button.s{background:var(--pl);color:var(--pd)}button:hover{opacity:.85}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.chip{background:#fff;color:var(--pd);border:1px solid var(--p)}.chip.on{background:var(--p);color:#fff}
+.m{display:flex;gap:8px;align-items:flex-start;font-size:14px;font-weight:normal;margin:0;padding:3px 0}
+.m input{width:auto;margin-top:3px}.m.o{color:#777}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.bar input{flex:1;min-width:180px}
+
+/* ===== [CSS-2] DOCUMENTO PDF (réplica del modelo oficial Anexo VIII) ===== */
+#doc{display:none}
+@page{size:A4;margin:12mm 12mm 16mm;
+  @bottom-center{content:"Página " counter(page) " de " counter(pages);font:9px Arial}} /* [CSS-2a] numeración */
+@media print{
+  body{background:#fff}header,main{display:none}#doc{display:block}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}} /* fuerza las barras grises */
+#doc{font:10px/1.3 Arial,Calibri,sans-serif;color:#000}
+#doc .top{display:flex;justify-content:space-between;align-items:center;text-align:center;margin-bottom:8px}
+#doc .top img{height:52px}#doc .top div{font-size:11px;padding:0 10px}
+#doc .b{border:1px solid #000;margin-bottom:10px;break-inside:avoid} /* [CSS-2b] bloques que no se parten */
+#doc .b.l{break-inside:auto}                                          /* bloque 4: puede partirse entre filas */
+#doc .h{background:#bfbfbf;font-weight:bold;display:flex;border-bottom:1px solid #000}
+#doc .h i{font-style:normal;width:26px;text-align:center;border-right:1px solid #000}#doc .h span{padding-left:6px}
+#doc .r{display:grid;grid-template-columns:var(--c,30%) 1fr;border-top:1px solid #000;break-inside:avoid;white-space:pre-wrap}
+#doc .h+.r{border-top:0}
+#doc .r>div{padding:3px 5px}#doc .r>div+div{border-left:1px solid #000}
+#doc .sub{background:#d9d9d9;font-weight:bold;text-align:center;border-top:1px solid #000;padding:2px}
+#doc .sm{font-size:8px}                                               /* [CSS-2c] fuente pequeña de las propuestas */
+#doc .p{padding:4px 6px;min-height:45px;white-space:pre-wrap}
+#doc .cb{display:inline-block;width:9px;height:9px;border:1px solid #000;margin-right:5px;text-align:center;font-size:9px;line-height:9px;vertical-align:-1px}
+</style></head>
+<body>
+<!-- ===== [HTML-1] CABECERA ===== -->
+<header><img src="img/ies.png" alt=""><h1>Programas de Refuerzo · IES Fuente de la Peña</h1></header>
+<main>
+<!-- [HTML-2] Bloque 1: alumno -->
+<section><h2>1 · Alumno/a</h2><div class="g">
+<div><label>Apellidos y nombre</label><input data-k="nombre"></div>
+<div><label>Curso</label><select data-k="curso"></select></div>
+<div><label>Grupo</label><select data-k="grupo"></select></div></div></section>
+<!-- [HTML-3] Bloque 2: profesorado -->
+<section><h2>2 · Profesorado</h2><div class="g">
+<div><label>Departamento didáctico</label><input data-k="dpto"></div>
+<div><label>Profesor/a</label><input data-k="prof"></div>
+<div><label>Tutor/a</label><input data-k="tutor"></div>
+<div><label>Materia/ámbito</label><input data-k="materia"></div></div></section>
+<!-- [HTML-4] Bloque 3: tipologías (las pinta JS) y fechas -->
+<section><h2>3 · Aplicación de la medida</h2><div id="tipos"></div>
+<div id="pend" class="g" hidden>
+<div><label>Materia pendiente</label><input data-k="pmat" placeholder="(la misma materia)"></div>
+<div><label>Curso de la materia pendiente</label><select data-k="pcurso"></select></div></div>
+<div id="fref" class="g" hidden><div><label>Refuerzo · fecha de inicio</label><input type="date" data-k="rini"></div>
+<div><label>Refuerzo · fecha de finalización</label><input type="date" data-k="rfin"></div></div>
+<div id="fpro" class="g" hidden><div><label>Profundización · fecha de inicio</label><input type="date" data-k="pini"></div>
+<div><label>Profundización · fecha de finalización</label><input type="date" data-k="pfin"></div></div></section>
+<!-- [HTML-5] Bloque 4: propuesta curricular y medidas (las pinta JS) -->
+<section><h2>4 · Propuesta curricular</h2>
+<label>Competencias específicas</label><textarea rows="2" data-k="comp"></textarea>
+<label>Criterios de evaluación</label><textarea rows="2" data-k="crit"></textarea>
+<label>Saberes básicos</label><textarea rows="2" data-k="sab"></textarea>
+<div id="meds"></div></section>
+<!-- [HTML-6] Bloques 5 y 6 -->
+<section><h2>5 · Observaciones</h2><textarea rows="3" data-k="obs"></textarea></section>
+<section><h2>6 · Fecha de la firma</h2><input type="date" data-k="fecha"></section>
+<!-- [HTML-7] Botones generales -->
+<section><div class="bar">
+<button onclick="pdf()">Generar PDF</button>
+<button class="s" onclick="otro()">Nuevo alumno</button>
+<button class="s" onclick="guardar()">Guardar borrador</button>
+<button class="s" onclick="$('#fjson').click()">Cargar borrador</button>
+<button class="s" onclick="$('#fcsv').click()">Cargar medidas (CSV)</button>
+<input type="file" id="fjson" accept=".json" hidden><input type="file" id="fcsv" accept=".csv,.txt" hidden></div></section>
+</main>
+<div id="doc"></div>
+<!-- [HTML-8] Copia interna de medidas.csv (se usa si no se puede leer el archivo) -->
+<script type="text/plain" id="csv">apartado;tipologia;texto
+1;tdah;Fraccionar las tareas en secuencias cortas con pasos intermedios definidos.
+1;tdah;Proporcionar enunciados de tareas concisos, resaltando las palabras clave en negrita.
+1;tdah;Alternar actividades que requieren alta concentración con tareas más manipulativas o dinámicas.
+1;dea_lectura;Simplificación sintáctica de enunciados complejos y apoyos gráficos explicativos.
+1;dea_lectura;Priorizar tareas de respuesta corta, selección múltiple o esquemas sobre amplios desarrollos redactados.
+1;dea_escritura;Permitir respuestas esquemáticas o en formato digital para reducir la fatiga en la copia.
+1;dea_escritura;Proporcionar plantillas con estructura de respuesta guiada o mapas conceptuales semirellenos.
+1;dea_calculo;Uso de problemas contextualizados apoyados en material visual o situaciones cotidianas.
+1;dea_calculo;Descomposición de procedimientos matemáticos complejos en guía paso a paso.
+1;nee_intelectual;Adaptación de actividades a su nivel de competencia curricular con enfoque muy funcional.
+1;nee_intelectual;Actividades con modelado previo por parte del docente e instrucciones altamente guiadas.
+1;nee_tea;Estructuración clara de actividades con listas de verificación visual (inicio, proceso y fin).
+1;nee_tea;Presentación de consignas literales evitando ambigüedades, metáforas o dobles sentidos.
+1;alcain;Proponer actividades de profundización, investigación abierta y retos de pensamiento crítico.
+1;alcain;Diseño de proyectos de transferencia interdisciplinar y síntesis creativa.
+1;ecophe;Actividades con glosarios terminológicos bilingües/de apoyo y vocabulario clave priorizado.
+1;pendientes;Tareas centradas en el cuadernillo de recuperación de contenidos mínimos de cursos anteriores.
+1;pendientes;Ejercicios tipo examen focalizados en los saberes básicos no alcanzados.
+1;repetidor;Actividades de afianzamiento y consolidación de contenidos fundamentales del curso actual.
+1;general;Variedad en la tipología de tareas (ejercicios prácticos, casos reales, indagación y síntesis).
+2;tdah;Combinar la explicación verbal con apoyo visual constante en pizarra o pantalla.
+2;tdah;Asegurar el contacto visual directo y realizar comprobaciones periódicas de comprensión.
+2;dea_lectura;Lectura en voz alta de enunciados e instrucciones por parte del docente o un compañero.
+2;dea_lectura;Uso de fuentes tipográficas claras de fácil lectura (Arial/Calibri), tamaño ampliado (12-14pt) y interlineado holgado.
+2;dea_escritura;Facilitar apuntes, esquemas e infografías previamente elaborados o digitalizados.
+2;nee_sensorial;Adaptación del formato del texto (macrotipos, alto contraste) o soporte auditivo/digital.
+2;nee_sensorial;Uso de sistemas FM/emisora en el aula y subtitulado de material audiovisual.
+2;nee_tea;Uso de apoyos visuales organizados (pictogramas, guías visuales paso a paso).
+2;nee_tea;Anticipación explícita de cambios de rutina o secuencias de trabajo de la sesión.
+2;ecophe;Uso de traductores digitales, diccionarios visuales e ilustraciones explicativas de contexto.
+2;pendientes;Acceso permanente a la guía de pendientes y materiales de estudio en el aula virtual / Google Classroom.
+2;general;Digitalización de materiales y esquemas descargables en la plataforma educativa del centro.
+3;tdah;Organizadores gráficos de tareas, temporizador/cronómetro visual para autogestión del tiempo.
+3;tdah;Uso de listas de chequeo (checklists) para revisión del material e itinerario de clase.
+3;dea_lectura;Uso de regla o guía de lectura, marcapáginas y programas de lectura por síntesis de voz.
+3;dea_calculo;Permitir el uso continuo de tabla pitagórica, tablas de fórmulas y calculadora básica.
+3;dea_calculo;Materiales manipulativos (bloques multibase, rectas numéricas, plantillas de organización gráfica de operaciones).
+3;nee_intelectual;Fichas adaptadas simplificadas con apoyos icónicos y alto contenido manipulativo.
+3;alcain;Plataformas de aprendizaje avanzado, lecturas complejas, laboratorios virtuales y kits de ampliación.
+3;pendientes;Cuadernillo autonómico/departamental de tareas de recuperación con solucionarios guiados.
+3;repetidor;Fichas de refuerzo escalonado con soluciones comentadas y mapas de conceptos clave.
+3;general;Uso de recursos multimedia interactivos, esquemas conceptuales dinámicos y presentaciones visuales.
+4;tdah;Ubicación en las primeras filas, cerca de la mesa del profesor/a y alejado de distractores (ventanas/puertas).
+4;tdah;Flexibilidad en la gestión del tiempo permitiendo descansos activos breves organizados.
+4;dea_lectura;Concesión de tiempo adicional (hasta un 25-50% más) en la realización de lecturas y exámenes.
+4;dea_escritura;Ubicación con un/a compañero/a tutor/a que colabore en la verificación de copia de tareas de la pizarra.
+4;nee_tea;Puesto de trabajo fijo, delimitado y predecible, libre de sobreestimulación sensorial innecesaria.
+4;nee_sensorial;Ubicación en primera fila orientada al docente para facilitar la lectura labiofacial/visión óptima.
+4;alcain;Agrupamientos flexibles: trabajo autónomo de investigación y roles de liderazgo en proyectos cooperativos.
+4;pendientes;Planificación de tutorías periódicas de seguimiento individualizado durante el curso.
+4;general;Alternancia entre trabajo individual enfocado, parejas cooperativas y pequeños grupos de nivel/heterogéneos.
+5;tdah;Exámenes fraccionados en dos partes o realizables en diferentes momentos si es necesario.
+5;tdah;Supervisión del docente al inicio y durante el examen para asegurar que ha comprendido las preguntas.
+5;dea_lectura;Lectura individualizada de los enunciados del examen por parte del docente antes de comenzar.
+5;dea_lectura;Posibilidad de realizar pruebas orales o con soporte digital en sustitución de pruebas escritas.
+5;dea_escritura;No penalización cuantitativa de las faltas de ortografía o grafía derivada de la dificultad específica.
+5;dea_escritura;Permitir formato tipo test, preguntas de completar o de unir con flechas.
+5;dea_calculo;Permitir el uso de calculadora o tablas de apoyo en exámenes donde el objetivo no sea el cálculo mecánico.
+5;nee_intelectual;Pruebas de evaluación adaptadas formalmente en extensión y nivel a sus criterios de evaluación priorizados.
+5;nee_intelectual;Uso prioritario de observación directa, escalas de estimación y carpetas de aprendizaje (portafolio).
+5;nee_tea;Formato de prueba claro, sin preguntas con enunciados redactados de forma ambigua.
+5;alcain;Evaluación mediante rúbricas de producto final, proyectos, autoevaluación y coevaluación exigentemente guiada.
+5;pendientes;Pruebas escritas/prácticas específicas trimestrales combinadas con la valoración del cuadernillo (30-40%).
+5;repetidor;Evaluación continua ponderando progresos de aprendizaje, proyectos prácticos y seguimiento diario.
+5;general;Diversificación de instrumentos: rúbricas de proyectos, listas de cotejo de trabajos y exámenes objetivamente ponderados.</script>
+<script>
+/* ===== [JS-1] CONFIGURACIÓN (valores fijos que se pueden cambiar aquí) ===== */
+const LOCALIDAD='Jaén';
+const FIN_POR_DEFECTO='2027-06-30';
+const TXT_CURRICULAR='Los incluidos en la Orden de 30 de mayo de 2023';
+const CURSOS=['1º ESO','2º ESO','3º ESO','4º ESO','1º Bachillerato','2º Bachillerato'];
+const GRUPOS=['A','B','C','D','E','F'];
+const APARTADOS=['','Tipos de actividades y tareas','Formas de acceso a la información','Recursos didácticos','Agrupamientos, distribución de espacios y tiempos','Instrumentos de evaluación'];
+
+/* ===== [JS-2] TIPOLOGÍAS: [código (igual que en medidas.csv), grupo, etiqueta, casilla del modelo] ===== */
+const TIPOS=[
+ ['repetidor','Programa de refuerzo','Repetidor/a (no promociona)','rep'],
+ ['pendientes','Programa de refuerzo','Pendientes','pen'],
+ ['general','Programa de refuerzo','Dificultades en la materia (no NEAE)','dif'],
+ ['nee_intelectual','NEAE › NEE','Discapacidad intelectual','nee'],
+ ['nee_tea','NEAE › NEE','TEA','nee'],
+ ['nee_sensorial','NEAE › NEE','Sensorial / Motor','nee'],
+ ['tdah','NEAE › Dificultades de aprendizaje','TDAH','dia'],
+ ['dea_lectura','NEAE › Dificultades de aprendizaje','DEA · Lectura / Dislexia','dia'],
+ ['dea_escritura','NEAE › Dificultades de aprendizaje','DEA · Escritura / Disgrafía','dia'],
+ ['dea_calculo','NEAE › Dificultades de aprendizaje','DEA · Cálculo / Discalculia','dia'],
+ ['ecophe','NEAE › Compensación educativa','ECOPHE / Incorporación tardía','comp'],
+ ['alcain','Programa de profundización','Altas capacidades (ALCAIN)','prof']];
+
+/* ===== [JS-3] UTILIDADES ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hoy=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const dmy=s=>s?s.split('-').reverse().join('/'):'';
+const larga=s=>new Date(s+'T12:00').toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+const f=c=>TIPOS.find(x=>x[0]==c)[3];            // casilla del modelo de una tipología
+const tiene=c=>S.tipos.some(t=>f(t)==c);          // ¿hay alguna tipología marcada de esa casilla?
+const k=(n,x)=>n+'|'+x;                           // clave de una medida
+
+/* ===== [JS-4] MEDIDAS (medidas.csv: apartado;tipologia;texto) ===== */
+let MED=[];
+function parseCSV(t){ // acepta ';' o ',' y comillas
+  t=t.replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n');const d=t.split('\n')[0].includes(';')?';':',';
+  const rows=[];let r=[],c='',q=false;
+  for(let i=0;i<t.length;i++){const x=t[i];
+    if(q){if(x=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=x}
+    else if(x=='"')q=true;else if(x==d){r.push(c);c=''}
+    else if(x=='\n'){r.push(c);rows.push(r);r=[];c=''}else c+=x}
+  if(c||r.length){r.push(c);rows.push(r)}
+  return rows.slice(1).filter(r=>r.length>=3&&r[2].trim()).map(r=>({a:+r[0],t:r[1].trim(),x:r[2].trim(),k:k(+r[0],r[2].trim())}));
+}
+async function cargarMedidas(){
+  try{const r=await fetch('medidas.csv');if(!r.ok)throw 0;MED=parseCSV(await r.text())}
+  catch(e){MED=parseCSV($('#csv').textContent)}   // sin servidor: copia interna
+}
+const recomendadas=()=>MED.filter(m=>S.tipos.includes(m.t)).map(m=>m.k)
+  .concat(Object.entries(S.extra).flatMap(([n,a])=>a.map(x=>k(n,x))));
+
+/* ===== [JS-5] ESTADO ===== */
+const nuevo=()=>({nombre:'',curso:'',grupo:'',tutor:'',dpto:'',prof:'',materia:'',tipos:['general'],pmat:'',pcurso:'',
+  rini:hoy(),rfin:FIN_POR_DEFECTO,pini:hoy(),pfin:FIN_POR_DEFECTO,comp:TXT_CURRICULAR,crit:TXT_CURRICULAR,sab:TXT_CURRICULAR,
+  obs:'',fecha:hoy(),sel:[],extra:{1:[],2:[],3:[],4:[],5:[]}});
+let S=nuevo();
+const guardaDocente=()=>{try{localStorage.setItem('pra_docente',JSON.stringify({dpto:S.dpto,prof:S.prof,materia:S.materia}))}catch(e){}};
+
+/* ===== [JS-6] INTERFAZ ===== */
+function volcar(){document.querySelectorAll('[data-k]').forEach(e=>e.value=S[e.dataset.k]??'')} // estado -> campos
+function pintaTipos(){ // [JS-6a] botones de tipologías agrupados
+  const g={};TIPOS.forEach(t=>(g[t[1]]=g[t[1]]||[]).push(t));
+  $('#tipos').innerHTML=Object.entries(g).map(([n,a])=>`<b>${n}</b><div class="chips">${a.map(t=>
+    `<button class="chip ${S.tipos.includes(t[0])?'on':''}" data-t="${t[0]}">${t[2]}</button>`).join('')}</div>`).join('');
+}
+function fechasVis(){$('#fref').hidden=!S.tipos.some(t=>f(t)!='prof');$('#fpro').hidden=!tiene('prof')}
+function pintaPend(){ // [JS-6b] materia pendiente y cursos anteriores de la misma etapa
+  const i=CURSOS.indexOf(S.curso),ops=i<0?[]:CURSOS.slice(i<4?0:4,i),s=$('[data-k=pcurso]');
+  s.innerHTML=ops.map(o=>`<option>${o}</option>`).join('');
+  if(!ops.includes(S.pcurso))S.pcurso=ops[ops.length-1]||'';
+  s.value=S.pcurso;$('#pend').hidden=!tiene('pen');
+}
+function pintaMedidas(){ // [JS-6c] los 5 apartados con sus medidas
+  const li=(key,x,o)=>`<label class="m ${o?'o':''}"><input type="checkbox" data-k2="${esc(key)}" ${S.sel.includes(key)?'checked':''}>${esc(x)}</label>`;
+  $('#meds').innerHTML=[1,2,3,4,5].map(n=>{
+    const l=MED.filter(m=>m.a==n),rec=l.filter(m=>S.tipos.includes(m.t)),oth=l.filter(m=>!S.tipos.includes(m.t));
+    return `<h3>${n}. ${APARTADOS[n]}</h3>`+rec.map(m=>li(m.k,m.x)).join('')+S.extra[n].map(x=>li(k(n,x),x)).join('')
+     +`<details><summary>Otras medidas (${oth.length})</summary>${oth.map(m=>li(m.k,m.x,1)).join('')}</details>`
+     +`<div class="bar"><input id="x${n}" placeholder="Añadir medida propia"><button class="s" data-add="${n}">Añadir</button><button data-cp="${n}">Copiar para Séneca</button></div>`;
+  }).join('');
+}
+function todo(){volcar();pintaTipos();pintaPend();pintaMedidas();fechasVis()}
+
+/* ===== [JS-7] COPIAR PARA SÉNECA ===== */
+const lista=n=>MED.filter(m=>m.a==n&&S.sel.includes(m.k)).map(m=>m.x).concat(S.extra[n].filter(x=>S.sel.includes(k(n,x))));
+const texto=n=>lista(n).map(x=>'• '+x).join('\n');
+
+/* ===== [JS-8] DOCUMENTO PDF (se rellena al imprimir) ===== */
+function renderDoc(){
+  const T=tiene,neae=T('nee')||T('dia')||T('comp'),ref=T('rep')||T('pen')||T('dif')||neae;
+  const r=(a,b)=>`<div class="r"><div>${a}</div><div>${esc(b)}</div></div>`;
+  const bl=(n,t,body,cl='')=>`<div class="b ${cl}"><div class="h"><i>${n}</i><span>${t}</span></div>${body}</div>`;
+  const cb=(on,t)=>`<div><span class="cb">${on?'X':''}</span>${t}</div>`;
+  const fch=(a,b)=>`Fecha inicio: <b>${dmy(a)}</b><br>Fecha finalización: <b>${dmy(b)}</b>`;
+  $('#doc').innerHTML=
+   `<div class="top"><img src="img/junta.png" alt=""><div><b>ANEXO VIII</b><br><u><b>PROGRAMA DE ATENCIÓN A LA DIVERSIDAD Y A LAS DIFERENCIAS INDIVIDUALES</b></u><br><b>Programas de refuerzo y profundización (adaptado a Orden de 31 de agosto de 2026)</b></div><img src="img/ies.png" alt=""></div>`
+  +bl(1,'DATOS IDENTIFICATIVOS DEL ALUMNO/A',`<div class="r" style="--c:70%"><div>APELLIDOS Y NOMBRE: <b>${esc(S.nombre)}</b></div><div>Curso/Grupo: <b>${esc(S.curso+' '+S.grupo)}</b></div></div>`)
+  +bl(2,'DATOS DEL PROFESORADO IMPLICADO EN EL PROGRAMA',
+    `<div class="r" style="--c:50%"><div>DEPARTAMENTO DIDÁCTICO:<br><b>${esc(S.dpto)}</b></div><div>PROFESOR/A:<br><b>${esc(S.prof)}</b></div></div>`
+   +`<div class="r" style="--c:50%"><div>TUTOR/A:<br><b>${esc(S.tutor)}</b></div><div>MATERIAS/ÁMBITOS:<br><b>${esc(S.materia)}</b></div></div>`)
+  +bl(3,'APLICACIÓN DE LA MEDIDA DE ATENCIÓN A LA DIVERSIDAD Y A LAS DIFERENCIAS INDIVIDUALES',
+    `<div class="r" style="--c:62%"><div>PROGRAMA DE REFUERZO:${cb(T('rep'),'<b>Alumnado que no promociona de curso (repetidor/a)</b>')}`
+   +cb(T('pen'),'<b>Alumnado que no supera algunas áreas del curso anterior (pendientes)</b>')+cb(T('dif'),'<b>Alumnado con dificultades en la materia (no NEAE)</b>')
+   +cb(neae,'<b>Alumnado NEAE. Tipo de NEAE:</b>')
+   +`<div style="margin-left:16px">${cb(T('nee'),'<b>Necesidades Educativas Especiales</b>')}${cb(T('dia'),'<b>Dificultades de Aprendizaje</b>')}${cb(T('comp'),'<b>Compensación educativa</b>')}</div></div>`
+   +`<div>${ref?fch(S.rini,S.rfin):''}</div></div>`
+   +`<div class="r" style="--c:62%"><div>${cb(T('prof'),'PROGRAMA DE PROFUNDIZACIÓN<br><i>(Alumnado con Altas Capacidades o altamente motivado)</i>')}</div><div>${T('prof')?fch(S.pini,S.pfin):''}</div></div>`)
+  +bl(4,'PROPUESTA CURRICULAR DE LA MATERIA /ÁMBITO',
+    r('MATERIA ÁMBITO',S.materia)+r('CURSO',S.curso)
+   +(T('pen')?r('MATERIA PENDIENTE',S.pmat||S.materia)+r('CURSO DE LA MATERIA PENDIENTE',S.pcurso):'')
+   +`<div class="sub">ELEMENTOS CURRICULARES A REFORZAR/PROFUNDIZAR</div>`
+   +r('COMPETENCIAS ESPECÍFICAS',S.comp)+r('CRITERIOS DE EVALUACIÓN',S.crit)+r('SABERES BÁSICOS',S.sab)
+   +`<div class="sub">PROPUESTAS DE OTROS ASPECTOS A TRABAJAR EN EL PROGRAMA</div>`
+   +[1,2,3,4,5].map(n=>`<div class="r sm"><div>${APARTADOS[n].toUpperCase()}</div><div>${esc(texto(n))}</div></div>`).join(''),'l')
+  +bl(5,'OBSERVACIONES',`<div class="p">${esc(S.obs)}</div>`)
+  +bl(6,'FIRMA DEL PROFESOR/A IMPLICADO/A O TUTOR/A DEL ALUMNO/A AL QUE SE LE APLICA EL PROGRAMA',
+    `<div class="p" style="text-align:center">FECHA Y FIRMA<br><br>En ${LOCALIDAD}, a ${larga(S.fecha)}<br><br>PROFESOR/A<br><br><br>Fdo.: ${esc(S.prof)}</div>`);
+}
+function pdf(){ // valida, pone el nombre de archivo (= título) e imprime
+  const m=[];if(!S.nombre.trim())m.push('Apellidos y nombre');if(!S.curso)m.push('Curso');if(!S.grupo)m.push('Grupo');
+  if(!S.materia.trim())m.push('Materia/ámbito');if(!S.tipos.length)m.push('Al menos una tipología');
+  if(m.length)return alert('Faltan datos: '+m.join(', '));
+  const t=document.title;
+  document.title=`${S.curso} ${S.grupo} - PRA - ${S.materia} - ${S.nombre}`.replace(/[\\/:*?"<>|]/g,'-');
+  renderDoc();print();document.title=t;
+}
+addEventListener('beforeprint',renderDoc); // también con Ctrl+P
+
+/* ===== [JS-9] BORRADORES, NUEVO ALUMNO Y ARRANQUE ===== */
+function guardar(){ // borrador como archivo (no se guarda nada del alumno en el navegador)
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));
+  a.download=`borrador PRA ${S.nombre||'alumno'}.json`;a.click();
+}
+function otro(){ // conserva datos del profesor/a, materia y textos curriculares
+  if(!confirm('¿Borrar los datos del alumno/a actual?'))return;
+  const c={dpto:S.dpto,prof:S.prof,materia:S.materia,comp:S.comp,crit:S.crit,sab:S.sab};
+  S=Object.assign(nuevo(),c);S.sel=recomendadas();todo();
+}
+(async()=>{
+  await cargarMedidas();
+  const fill=(key,a)=>$('[data-k='+key+']').innerHTML='<option value="">—</option>'+a.map(o=>`<option>${o}</option>`).join('');
+  fill('curso',CURSOS);fill('grupo',GRUPOS);
+  try{Object.assign(S,JSON.parse(localStorage.getItem('pra_docente')||'{}'))}catch(e){}   // datos del profesor (no del alumno)
+  S.sel=recomendadas();
+  document.querySelectorAll('[data-k]').forEach(e=>e.oninput=()=>{S[e.dataset.k]=e.value;
+    if(e.dataset.k=='curso')pintaPend();if(['dpto','prof','materia'].includes(e.dataset.k))guardaDocente()});
+  $('#tipos').onclick=e=>{const c=e.target.dataset.t;if(!c)return;const i=S.tipos.indexOf(c);
+    i<0?S.tipos.push(c):S.tipos.splice(i,1);S.sel=recomendadas();pintaTipos();pintaPend();pintaMedidas();fechasVis()};
+  $('#meds').onchange=e=>{const x=e.target.dataset.k2;if(x)S.sel=e.target.checked?[...S.sel,x]:S.sel.filter(y=>y!=x)};
+  $('#meds').onclick=e=>{const a=e.target.dataset.add,c=e.target.dataset.cp;
+    if(a){const v=$('#x'+a).value.trim();if(v){S.extra[a].push(v);S.sel.push(k(a,v));pintaMedidas()}}
+    else if(c)navigator.clipboard.writeText(texto(c)).then(()=>{e.target.textContent='¡Copiado!';setTimeout(()=>e.target.textContent='Copiar para Séneca',1500)})};
+  $('#fjson').onchange=e=>e.target.files[0].text().then(t=>{S=Object.assign(nuevo(),JSON.parse(t));todo()});
+  $('#fcsv').onchange=e=>e.target.files[0].text().then(t=>{MED=parseCSV(t);S.sel=recomendadas();pintaMedidas()});
+  todo();
+})();
+</script></body></html>
