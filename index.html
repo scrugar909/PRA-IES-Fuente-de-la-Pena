@@ -76,6 +76,12 @@ details.ad{display:block;margin:2px 0 0}.ad summary{font-size:12.5px;cursor:poin
 @media(min-width:1000px){main{grid-template-columns:minmax(0,620px) minmax(0,570px);justify-content:center;max-width:none}}
 #bsug{background:var(--p);color:#fff;margin-top:6px}
 #sug ol{margin:0 0 8px 18px;padding:0;font-size:13.5px}
+/* ===== [CSS-1f] COLUMNA IZQUIERDA MÁS ESTRECHA Y RECTÁNGULOS NEAE ===== */
+@media(min-width:1000px){main{grid-template-columns:minmax(0,580px) minmax(0,570px)}}
+section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding:3px 7px}
+.sb{margin-left:0}
+.nb{background:rgba(255,255,255,.55);border:0.5px solid rgba(112,64,144,.45);border-radius:8px;padding:6px 8px 0;margin:0 0 6px}
+.nb .r{margin:0 0 6px!important}.nb .l2{font-weight:bold}
 /* ===== [CSS-2] DOCUMENTO PDF (réplica del modelo oficial Anexo VIII) ===== */
 #doc{display:none}
 @page{size:A4;margin:12mm 12mm 16mm;
@@ -136,9 +142,9 @@ details.ad{display:block;margin:2px 0 0}.ad summary{font-size:12.5px;cursor:poin
 <div class="bx b1"><p class="l">PRA para alumnado con:</p><div class="r" id="g-a" style="margin:0"></div>
 <div id="pend" hidden style="margin-top:8px"></div></div>
 <div class="bx b2"><p class="l">PRA para alumnado con Necesidades Específicas de Apoyo Educativo (NEAE)</p><div class="sb">
-<p class="l2">NEAE con Necesidades Educativas Especiales (NEE)</p><div class="r" id="g-nee"></div>
-<p class="l2">NEAE con Dificultades de Aprendizaje (DIA)</p><div class="r" id="g-dia"></div>
-<p class="l2">NEAE por Compensación Educativa</p><div class="r" id="g-comp" style="margin:0"></div></div></div></div>
+<div class="nb"><p class="l2">NEAE con Necesidades Educativas Especiales (NEE)</p><div class="r" id="g-nee"></div></div>
+<div class="nb"><p class="l2">NEAE con Dificultades de Aprendizaje (DIA)</p><div class="r" id="g-dia"></div></div>
+<div class="nb"><p class="l2">NEAE por Compensación Educativa</p><div class="r" id="g-comp" style="margin:0"></div></div></div></div></div>
 <div class="bx b3"><div class="hd"><p class="h">PROGRAMA DE PROFUNDIZACIÓN <span>para alumnado NEAE de Altas Capacidades Intelectuales o no NEAE altamente motivado</span></p>
 <div class="d" id="fpro" hidden><span>Inicio</span><input type="date" data-k="pini"><span>Fin</span><input type="date" data-k="pfin"></div></div>
 <div class="r" id="g-prof" style="margin:0"></div></div></section>
@@ -224,7 +230,7 @@ details.ad{display:block;margin:2px 0 0}.ad summary{font-size:12.5px;cursor:poin
 <script>
 /* ===== [JS-1] CONFIGURACIÓN (valores fijos que se pueden cambiar aquí) ===== */
 const LOCALIDAD='Jaén';
-const VERSION='1.03',FECHA_VERSION='2026-10-25';
+const VERSION='1.04',FECHA_VERSION='2026-10-26';
 const EMAIL='scrugar909@g.educaand.es';
 const MSG_INCOMP='"Dificultades en la materia (no NEAE)" y las categorías NEAE son incompatibles. Desmarca una de ellas antes de marcar la otra.'; // subir en cada entrega
 const GRUPOS_ESO=['A','B','C'],SIN_PEND=['1º ESO','1º Bachillerato'];
@@ -289,7 +295,7 @@ const recomendadas=()=>MED.filter(m=>S.tipos.includes(m.t)).map(m=>m.k)
 const nuevo=()=>({nombre:'',curso:'',grupo:'',tutor:'',dpto:'',prof:'',materia:'',tipos:[],pend:[],
   rini:hoy(),rfin:FIN_POR_DEFECTO,pini:hoy(),pfin:FIN_POR_DEFECTO,comp:TXT_CURRICULAR,crit:TXT_CURRICULAR,sab:TXT_CURRICULAR,
   obs:'',fecha:hoy(),sel:[],extra:{1:[],2:[],3:[],4:[],5:[]}});
-let S=nuevo(),sucio=false,SUG={t:[],a:'',x:''};
+let S=nuevo(),sucio=false,ABR={},SUG={t:[],a:'',x:''};
 const guardaDocente=()=>{try{localStorage.setItem('pra_docente',JSON.stringify({dpto:S.dpto,prof:S.prof,materia:S.materia}))}catch(e){}};
 
 /* ===== [JS-6] INTERFAZ ===== */
@@ -315,10 +321,10 @@ function pintaPend(){ // [JS-6b] materias pendientes (una o varias) de cursos an
 function pintaMedidas(){ // [JS-6c] los 5 apartados, cada uno en su rectángulo (colores alternos)
   const li=(key,x,o)=>`<label class="m ${o?'o':''}"><input type="checkbox" data-k2="${esc(key)}" ${S.sel.includes(key)?'checked':''}>${esc(x)}</label>`;
   $('#meds').innerHTML=[1,2,3,4,5].map(n=>{
-    const l=MED.filter(m=>m.a==n),rec=l.filter(m=>S.tipos.includes(m.t)),oth=l.filter(m=>!S.tipos.includes(m.t));
+    const l=MED.filter(m=>m.a==n),rec=l.filter(m=>S.tipos.includes(m.t)||S.sel.includes(m.k)),oth=l.filter(m=>!S.tipos.includes(m.t)&&!S.sel.includes(m.k));
     return `<div class="mk mk${n%2?1:2}"><div class="mh"><b>${n}. ${APARTADOS[n]}</b><button class="ic" data-cp="${n}" aria-label="Copiar para Séneca" title="Copiar para Séneca">${ICON_COPY}</button></div>`
      +rec.map(m=>li(m.k,m.x)).join('')+S.extra[n].map(x=>li(k(n,x),x)).join('')
-     +`<details><summary>Otras medidas (${oth.length})</summary>${oth.map(m=>li(m.k,m.x,1)).join('')}</details>`
+     +`<details data-dn="${n}" ${ABR[n]?'open':''}><summary>Otras medidas (${oth.length})</summary>${oth.map(m=>li(m.k,m.x,1)).join('')}</details>`
      +`<details class="ad"><summary>+ medida propia</summary><div class="ad2"><input id="x${n}" placeholder="Escribe la medida"><button class="s" data-add="${n}">Añadir</button></div></details></div>`}).join('');
 }
 function todo(){pintaGrupo();volcar();pintaTipos();pintaPend();pintaMedidas();fechasVis()}
@@ -409,7 +415,7 @@ function otro(){ // conserva datos del profesor/a, materia y textos curriculares
         return alert('"Dificultades en la materia (no NEAE)" y las categorías NEAE son incompatibles. Desmarca una de ellas antes de marcar la otra.');
       S.tipos.push(c)}else S.tipos.splice(i,1);
     S.sel=recomendadas();pintaTipos();pintaPend();pintaMedidas();fechasVis()};
-  $('#meds').onchange=e=>{const x=e.target.dataset.k2;if(x)S.sel=e.target.checked?[...S.sel,x]:S.sel.filter(y=>y!=x)};
+  $('#meds').onchange=e=>{const x=e.target.dataset.k2;if(x){S.sel=e.target.checked?[...S.sel,x]:S.sel.filter(y=>y!=x);pintaMedidas()}};
   $('#meds').onclick=e=>{const b=e.target.closest('[data-add],[data-cp]');if(!b)return;const a=b.dataset.add,c=b.dataset.cp;
     if(a){const v=$('#x'+a).value.trim();if(v){S.extra[a].push(v);S.sel.push(k(a,v));pintaMedidas()}}
     else navigator.clipboard.writeText(texto(c)).then(()=>{b.innerHTML=ICON_OK;setTimeout(()=>b.innerHTML=ICON_COPY,1500)})};
@@ -418,6 +424,7 @@ function otro(){ // conserva datos del profesor/a, materia y textos curriculares
     const cods=TIPOS.map(x=>x[0]),mal=[...new Set(MED.filter(m=>!cods.includes(m.t)||!(m.a>=1&&m.a<=5)).map(m=>m.t+' (apartado '+m.a+')'))];
     alert(MED.length?`Cargadas ${MED.length} medidas.`+(mal.length?`\nAtención: hay filas con tipología o apartado no reconocidos: ${mal.join(', ')}.`:''):'No se ha cargado ninguna medida. Revisa que el archivo tenga cabecera y tres columnas (apartado;tipologia;texto).')});
   todo();
+  $('#meds').addEventListener('toggle',e=>{const n=e.target.dataset.dn;if(n)ABR[n]=e.target.open},true); // recuerda qué desplegables están abiertos
   /* [JS-10] Sugerencia de medida (correo) y aviso al cerrar con datos sin guardar */
   const GT={a:'Alumnado con',nee:'NEAE · NEE',dia:'NEAE · Dificultades de aprendizaje (DIA)',comp:'NEAE · Compensación educativa',prof:'Programa de profundización'};
   const pintaSug=()=>{$('#sg').innerHTML=Object.keys(GT).map(g=>`<p class="l">${GT[g]}</p><div class="r">${TIPOS.filter(t=>t[1]==g).map(t=>`<button class="c ${SUG.t.includes(t[0])?'on':''}" data-st="${t[0]}">${t[2]}</button>`).join('')}</div>`).join('');
