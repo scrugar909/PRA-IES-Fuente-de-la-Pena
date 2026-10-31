@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prueba de acceso (temporal)</title>
+<style>
+ body{font:15px/1.45 system-ui,Arial,sans-serif;max-width:640px;margin:24px auto;padding:0 16px;color:#222}
+ h1{font-size:20px;color:#4f2a68}
+ label{display:block;font-weight:600;margin:14px 0 4px}
+ input{width:100%;box-sizing:border-box;padding:8px;border:1px solid #bbb;border-radius:6px;font:inherit}
+ #btn{margin:16px 0}
+ ol{padding-left:20px} li{margin:6px 0} .ok{color:#0a6b3c} .ko{color:#b3261e;font-weight:600} .in{color:#555}
+ small{color:#666}
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<h1>Prueba de acceso con Google (temporal)</h1>
+<p><small>Página de comprobación del paso A. Se borrará cuando esté lista la versión 1.07.</small></p>
+<label for="url">Dirección del script (termina en /exec)</label>
+<input id="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+<div id="btn"></div>
+<ol id="log"></ol>
+
+<script>
+const CLIENT_ID='594201281818-avdkom32fm6lfp4epodtd3u0mrtnajm2.apps.googleusercontent.com';
+const $=s=>document.querySelector(s);
+const log=(txt,cl)=>{const li=document.createElement('li');li.className=cl||'in';li.textContent=txt;$('#log').appendChild(li)};
+try{$('#url').value=localStorage.getItem('prueba_url')||''}catch(e){}
+
+function datosToken(t){ // solo para mostrar en pantalla; la validación real la hace el script
+  try{const p=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(atob(p))}catch(e){return {}}
+}
+
+async function alRecibirToken(resp){
+  log('1. Google ha devuelto un token de identidad.','ok');
+  const d=datosToken(resp.credential);
+  log('   Cuenta: '+(d.email||'(no legible)')+(d.hd?' · dominio: '+d.hd:' · sin dominio de organización (cuenta personal)'),'in');
+  const url=$('#url').value.trim();
+  try{localStorage.setItem('prueba_url',url)}catch(e){}
+  if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url)){log('2. La dirección del script no parece correcta (debe empezar por https://script.google.com y acabar en /exec).','ko');return}
+  let texto;
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:resp.credential})});
+    texto=await r.text();
+  }catch(e){
+    log('2. No se pudo contactar con el script. Causas habituales: dirección equivocada o publicación que no permite acceso a «Cualquier usuario».','ko');return;
+  }
+  let res;
+  try{res=JSON.parse(texto)}catch(e){
+    log('2. El script ha devuelto una página en lugar de datos. Suele indicar que el acceso no está en «Cualquier usuario» o que hay que volver a implementar el script.','ko');return;
+  }
+  log('2. El script ha respondido.','ok');
+  if(res.ok){log('3. ACCESO CONCEDIDO: '+(res.docente||res.email)+' figura en la hoja de usuarios.','ok')}
+  else{log('3. ACCESO DENEGADO en el paso «'+res.paso+'»: '+res.motivo+(res.email?' ('+res.email+')':''),'ko')}
+}
+
+function iniciar(intentos){
+  if(window.google&&google.accounts&&google.accounts.id){
+    google.accounts.id.initialize({client_id:CLIENT_ID,callback:alRecibirToken,auto_select:false});
+    google.accounts.id.renderButton($('#btn'),{theme:'outline',size:'large',text:'signin_with',locale:'es'});
+    return;
+  }
+  if(intentos>40){log('No se pudo cargar el servicio de Google (red, bloqueador o política del dominio).','ko');return}
+  setTimeout(()=>iniciar(intentos+1),150);
+}
+iniciar(0);
+</script>
+</body>
+</html>
