@@ -17,7 +17,7 @@
 </head>
 <body>
 <h1>Prueba de acceso con Google (temporal)</h1>
-<p><small>Página de comprobación del paso A. Se borrará cuando esté lista la versión 1.07.</small></p>
+<p><small>Página de comprobación (pasos A y B). Se borrará cuando esté lista la versión 1.07.</small></p>
 <label for="url">Dirección del script (termina en /exec)</label>
 <input id="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
 <div id="btn"></div>
@@ -52,7 +52,12 @@ async function alRecibirToken(resp){
     log('2. El script ha devuelto una página en lugar de datos. Suele indicar que el acceso no está en «Cualquier usuario» o que hay que volver a implementar el script.','ko');return;
   }
   log('2. El script ha respondido.','ok');
-  if(res.ok){log('3. ACCESO CONCEDIDO: '+(res.docente||res.email)+' figura en la hoja de usuarios.','ok')}
+  if(res.ok){
+    log('3. ACCESO CONCEDIDO: '+(res.docente||res.email)+' figura en la hoja de usuarios.','ok');
+    const m=res.medidas||[],c={};m.forEach(r=>{c[r[1]]=(c[r[1]]||0)+1});
+    log('4. Medidas recibidas: '+m.length+(res.descartadas?' · filas descartadas por datos incompletos: '+res.descartadas:''),m.length?'ok':'ko');
+    log('   Por tipología: '+Object.entries(c).map(([k,v])=>k+' '+v).join(' · '),'in');
+  }
   else{log('3. ACCESO DENEGADO en el paso «'+res.paso+'»: '+res.motivo+(res.email?' ('+res.email+')':''),'ko')}
 }
 
