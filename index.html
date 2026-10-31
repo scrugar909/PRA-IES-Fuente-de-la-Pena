@@ -20,7 +20,7 @@ button.s{background:var(--pl);color:var(--pd)}button:hover{opacity:.85}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
 .chip{background:#fff;color:var(--pd);border:1px solid var(--p)}.chip.on{background:var(--p);color:#fff}
 .m{display:flex;gap:8px;align-items:flex-start;font-size:14px;font-weight:normal;margin:0;padding:3px 0}
-.m input{width:auto;margin-top:3px}.m.o{color:#777}
+.m input{width:auto;margin-top:3px}.m.ot{color:#777}
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.bar input{flex:1;min-width:180px}
 
 /* ===== [CSS-1b] BLOQUES COMPACTOS (3, 4 y 5) ===== */
@@ -82,6 +82,18 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 .sb{margin-left:0}
 .nb{background:rgba(255,255,255,.55);border:0.5px solid rgba(112,64,144,.45);border-radius:8px;padding:6px 8px 0;margin:0 0 6px}
 .nb .r{margin:0 0 6px!important}.nb .l2{font-weight:bold}
+/* ===== [CSS-1g] ETIQUETAS AL PASAR EL RATÓN, GRUPOS DE "OTRAS MEDIDAS" Y AVISO DEL PDF (v1.05) ===== */
+.c[data-tip]{position:relative}
+.c[data-tip]::after{content:attr(data-tip);display:none;position:absolute;left:0;bottom:calc(100% + 6px);width:max-content;max-width:260px;background:#2b2b2b;color:#fff;font-size:12px;font-weight:normal;line-height:1.3;text-align:left;white-space:normal;padding:5px 8px;border-radius:6px;pointer-events:none;z-index:30}
+.c[data-tip]:hover::after,.c[data-tip]:focus-visible::after{display:block}
+.bq{height:26px;font-size:12.5px;padding:0 8px;margin:4px 0 6px;background:#fff}
+.mk details.gr{margin:4px 0;padding:2px 8px;border:.5px solid #cdbfda;border-radius:8px;color:#333}
+.gr>summary{cursor:pointer;font-weight:bold;color:var(--pd);padding:3px 0}
+.gr.g1{background:#fff}.gr.g2{background:#e6dcef}.gr.gc{background:#fff1cc;border-color:#e0c36b}
+.gr .m.ot{color:#333}.m small{color:#777;font-size:11px}
+.nr{font-size:12.5px;color:#666;margin:4px 0}
+#gd{max-width:540px;width:92vw}#gd h4{margin:10px 0 4px;font-size:13.5px;color:var(--pd)}#gd p{white-space:pre-line}
+#gd .bar{justify-content:flex-end;margin-top:12px}
 /* ===== [CSS-2] DOCUMENTO PDF (réplica del modelo oficial Anexo VIII) ===== */
 #doc{display:none}
 @page{size:A4;margin:12mm 12mm 16mm;
@@ -123,6 +135,10 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <label>Redacción de la medida</label><textarea id="sx" rows="3"></textarea>
 <p class="v">El correo solo lleva tipología, tipo de medida y texto: ningún dato del alumno.</p>
 <div class="bar"><button id="sgm">Abrir en Gmail</button><button class="s" id="sgl">Mi programa de correo</button><button class="s" id="sgc">Copiar texto</button><button class="s" id="sgx">Cerrar</button></div></dialog>
+<dialog id="gd"><h3>GESTIÓN DOCUMENTAL DEL PROGRAMA DE REFUERZO</h3>
+<p>Se va a proceder a generar un PDF con los datos seleccionados. La gestión de la privacidad de los datos que aparecen es su responsabilidad a partir de este momento.</p>
+<h4>CIRCUITO DE FIRMAS</h4><p id="gf"></p>
+<div class="bar"><button class="s" id="gdc">Cancelar</button><button id="gda">Aceptar y generar PDF</button></div></dialog>
 <main>
 <!-- [HTML-2] Bloque 1: alumno -->
 <section><h2>1 · Alumno/a</h2><div class="g">
@@ -162,76 +178,223 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <div id="doc"><div class="top"><img id="lj" alt=""><div><b>ANEXO VIII</b><br><u><b>PROGRAMA DE ATENCIÓN A LA DIVERSIDAD Y A LAS DIFERENCIAS INDIVIDUALES</b></u><br><b>Programas de refuerzo y profundización (adaptado a Orden de 31 de agosto de 2026)</b></div><img id="li" alt=""></div><div id="docb"></div></div>
 <!-- [HTML-8] Copia interna de medidas.csv (se usa si no se puede leer el archivo) -->
 <script type="text/plain" id="csv">apartado;tipologia;texto
-1;tdah;Fraccionar las tareas en secuencias cortas con pasos intermedios definidos.
-1;tdah;Proporcionar enunciados de tareas concisos, resaltando las palabras clave en negrita.
-1;tdah;Alternar actividades que requieren alta concentración con tareas más manipulativas o dinámicas.
-1;dea_lectura;Simplificación sintáctica de enunciados complejos y apoyos gráficos explicativos.
-1;dea_lectura;Priorizar tareas de respuesta corta, selección múltiple o esquemas sobre amplios desarrollos redactados.
-1;dea_escritura;Permitir respuestas esquemáticas o en formato digital para reducir la fatiga en la copia.
-1;dea_escritura;Proporcionar plantillas con estructura de respuesta guiada o mapas conceptuales semirellenos.
-1;dea_calculo;Uso de problemas contextualizados apoyados en material visual o situaciones cotidianas.
-1;dea_calculo;Descomposición de procedimientos matemáticos complejos en guía paso a paso.
+1;repetidor;Actividades de afianzamiento y consolidación de contenidos fundamentales del curso actual.
+3;repetidor;Fichas de refuerzo escalonado con soluciones comentadas y mapas de conceptos clave.
+3;repetidor;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+5;repetidor;Evaluación continua ponderando progresos de aprendizaje, proyectos prácticos y seguimiento diario.
+1;pendientes;Ejercicios tipo examen focalizados en los saberes básicos no alcanzados.
+1;pendientes;Tareas centradas en el cuadernillo de recuperación de contenidos mínimos de cursos anteriores.
+2;pendientes;Acceso permanente a la guía de pendientes y materiales de estudio en el aula virtual / Google Classroom.
+3;pendientes;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;pendientes;Cuadernillo autonómico/departamental de tareas de recuperación con solucionarios guiados.
+4;pendientes;Planificación de tutorías periódicas de seguimiento individualizado durante el curso.
+5;pendientes;Pruebas escritas/prácticas específicas trimestrales combinadas con la valoración del cuadernillo (30-40%).
+1;general;Variedad en la tipología de tareas (ejercicios prácticos, casos reales, indagación y síntesis).
+2;general;Digitalización de materiales y esquemas descargables en la plataforma educativa del centro.
+3;general;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;general;Uso de recursos multimedia interactivos, esquemas conceptuales dinámicos y presentaciones visuales.
+4;general;Alternancia entre trabajo individual enfocado, parejas cooperativas y pequeños grupos de nivel/heterogéneos.
+5;general;Diversificación de instrumentos: rúbricas de proyectos, listas de cotejo de trabajos y exámenes objetivamente ponderados.
 1;nee_intelectual;Adaptación de actividades a su nivel de competencia curricular con enfoque muy funcional.
 1;nee_intelectual;Actividades con modelado previo por parte del docente e instrucciones altamente guiadas.
-1;nee_tea;Estructuración clara de actividades con listas de verificación visual (inicio, proceso y fin).
-1;nee_tea;Presentación de consignas literales evitando ambigüedades, metáforas o dobles sentidos.
-1;alcain;Proponer actividades de profundización, investigación abierta y retos de pensamiento crítico.
-1;alcain;Diseño de proyectos de transferencia interdisciplinar y síntesis creativa.
-1;ecophe;Actividades con glosarios terminológicos bilingües/de apoyo y vocabulario clave priorizado.
-1;pendientes;Tareas centradas en el cuadernillo de recuperación de contenidos mínimos de cursos anteriores.
-1;pendientes;Ejercicios tipo examen focalizados en los saberes básicos no alcanzados.
-1;repetidor;Actividades de afianzamiento y consolidación de contenidos fundamentales del curso actual.
-1;general;Variedad en la tipología de tareas (ejercicios prácticos, casos reales, indagación y síntesis).
-2;tdah;Combinar la explicación verbal con apoyo visual constante en pizarra o pantalla.
-2;tdah;Asegurar el contacto visual directo y realizar comprobaciones periódicas de comprensión.
-2;dea_lectura;Lectura en voz alta de enunciados e instrucciones por parte del docente o un compañero.
-2;dea_lectura;Uso de fuentes tipográficas claras de fácil lectura (Arial/Calibri), tamaño ampliado (12-14pt) y interlineado holgado.
-2;dea_escritura;Facilitar apuntes, esquemas e infografías previamente elaborados o digitalizados.
-2;nee_sensorial;Adaptación del formato del texto (macrotipos, alto contraste) o soporte auditivo/digital.
-2;nee_sensorial;Uso de sistemas FM/emisora en el aula y subtitulado de material audiovisual.
-2;nee_tea;Uso de apoyos visuales organizados (pictogramas, guías visuales paso a paso).
-2;nee_tea;Anticipación explícita de cambios de rutina o secuencias de trabajo de la sesión.
-2;ecophe;Uso de traductores digitales, diccionarios visuales e ilustraciones explicativas de contexto.
-2;pendientes;Acceso permanente a la guía de pendientes y materiales de estudio en el aula virtual / Google Classroom.
-2;general;Digitalización de materiales y esquemas descargables en la plataforma educativa del centro.
-3;tdah;Organizadores gráficos de tareas, temporizador/cronómetro visual para autogestión del tiempo.
-3;tdah;Uso de listas de chequeo (checklists) para revisión del material e itinerario de clase.
-3;dea_lectura;Uso de regla o guía de lectura, marcapáginas y programas de lectura por síntesis de voz.
-3;dea_calculo;Permitir el uso continuo de tabla pitagórica, tablas de fórmulas y calculadora básica.
-3;dea_calculo;Materiales manipulativos (bloques multibase, rectas numéricas, plantillas de organización gráfica de operaciones).
+1;nee_intelectual;Repasos frecuentes para consolidar aprendizajes, con corrección guiada y refuerzo positivo de los avances.
+2;nee_intelectual;Explicaciones acompañadas de imágenes, esquemas sencillos, ejemplos concretos o demostraciones.
+2;nee_intelectual;Comprobación de la comprensión, pidiendo que explique o muestre qué debe hacer antes de comenzar.
+2;nee_intelectual;Información con lenguaje claro, frases breves y palabras clave destacadas.
 3;nee_intelectual;Fichas adaptadas simplificadas con apoyos icónicos y alto contenido manipulativo.
-3;alcain;Plataformas de aprendizaje avanzado, lecturas complejas, laboratorios virtuales y kits de ampliación.
-3;pendientes;Cuadernillo autonómico/departamental de tareas de recuperación con solucionarios guiados.
-3;repetidor;Fichas de refuerzo escalonado con soluciones comentadas y mapas de conceptos clave.
-3;general;Uso de recursos multimedia interactivos, esquemas conceptuales dinámicos y presentaciones visuales.
-4;tdah;Ubicación en las primeras filas, cerca de la mesa del profesor/a y alejado de distractores (ventanas/puertas).
-4;tdah;Flexibilidad en la gestión del tiempo permitiendo descansos activos breves organizados.
-4;dea_lectura;Concesión de tiempo adicional (hasta un 25-50% más) en la realización de lecturas y exámenes.
-4;dea_escritura;Ubicación con un/a compañero/a tutor/a que colabore en la verificación de copia de tareas de la pizarra.
-4;nee_tea;Puesto de trabajo fijo, delimitado y predecible, libre de sobreestimulación sensorial innecesaria.
-4;nee_sensorial;Ubicación en primera fila orientada al docente para facilitar la lectura labiofacial/visión óptima.
-4;alcain;Agrupamientos flexibles: trabajo autónomo de investigación y roles de liderazgo en proyectos cooperativos.
-4;pendientes;Planificación de tutorías periódicas de seguimiento individualizado durante el curso.
-4;general;Alternancia entre trabajo individual enfocado, parejas cooperativas y pequeños grupos de nivel/heterogéneos.
-5;tdah;Exámenes fraccionados en dos partes o realizables en diferentes momentos si es necesario.
-5;tdah;Supervisión del docente al inicio y durante el examen para asegurar que ha comprendido las preguntas.
-5;dea_lectura;Lectura individualizada de los enunciados del examen por parte del docente antes de comenzar.
-5;dea_lectura;Posibilidad de realizar pruebas orales o con soporte digital en sustitución de pruebas escritas.
-5;dea_escritura;No penalización cuantitativa de las faltas de ortografía o grafía derivada de la dificultad específica.
-5;dea_escritura;Permitir formato tipo test, preguntas de completar o de unir con flechas.
-5;dea_calculo;Permitir el uso de calculadora o tablas de apoyo en exámenes donde el objetivo no sea el cálculo mecánico.
+3;nee_intelectual;Materiales manipulativos y recursos digitales accesibles para comprender y practicar los aprendizajes.
+3;nee_intelectual;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;nee_intelectual;Agenda o lista de pasos para organizar materiales, tareas y seguimiento.
+4;nee_intelectual;Trabajo por parejas o en pequeños grupos, con roles claros y ayuda entre iguales cuando sea necesaria.
+4;nee_intelectual;Tiempo ajustado a su ritmo de aprendizaje, con pausas y supervisión durante las tareas.
+4;nee_intelectual;Ubicación que facilite la atención, el acceso a la información y el apoyo del docente.
+5;nee_intelectual;Acompañar las explicaciones con esquemas, ejemplos o apoyos visuales ajustados a sus necesidades.
 5;nee_intelectual;Pruebas de evaluación adaptadas formalmente en extensión y nivel a sus criterios de evaluación priorizados.
 5;nee_intelectual;Uso prioritario de observación directa, escalas de estimación y carpetas de aprendizaje (portafolio).
+1;nee_tea;Presentación de consignas literales evitando ambigüedades, metáforas o dobles sentidos.
+1;nee_tea;Estructuración clara de actividades con listas de verificación visual (inicio, proceso y fin).
+2;nee_tea;Uso de apoyos visuales organizados (pictogramas, guías visuales paso a paso).
+2;nee_tea;Anticipar la secuencia de la sesión y los cambios de actividad o rutina, comprobando su comprensión.
+2;nee_tea;Anticipación explícita de cambios de rutina o secuencias de trabajo de la sesión.
+3;nee_tea;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;nee_tea;Facilitar guías de trabajo y modelos de actividades resueltas que pueda consultar de forma autónoma.
+3;nee_tea;Emplear guiones o historias sociales para aclarar situaciones y ofrecer estrategias de participación y petición de ayuda.
+3;nee_tea;Utilizar agendas, calendarios o listas de verificación para organizar tareas y materiales.
+4;nee_tea;Puesto de trabajo fijo, delimitado y predecible, libre de sobreestimulación sensorial innecesaria.
+4;nee_tea;Ajustar los tiempos de trabajo y las transiciones, permitiendo pausas cuando sean necesarias.
+5;nee_tea;Diversificar los instrumentos y ajustar las condiciones de las exposiciones orales, manteniendo el aprendizaje y los criterios que se evalúan.
 5;nee_tea;Formato de prueba claro, sin preguntas con enunciados redactados de forma ambigua.
-5;alcain;Evaluación mediante rúbricas de producto final, proyectos, autoevaluación y coevaluación exigentemente guiada.
-5;pendientes;Pruebas escritas/prácticas específicas trimestrales combinadas con la valoración del cuadernillo (30-40%).
-5;repetidor;Evaluación continua ponderando progresos de aprendizaje, proyectos prácticos y seguimiento diario.
-5;general;Diversificación de instrumentos: rúbricas de proyectos, listas de cotejo de trabajos y exámenes objetivamente ponderados.</script>
+1;nee_tel;Priorizar actividades con preguntas cortas, respuestas tipo test, de elección múltiple y de relación.
+1;nee_tel;Reforzar verbalmente de forma positiva ante los logros.
+1;nee_tel;Simplificar las instrucciones que se le dan por escrito subrayando o destacando lo más relevante.
+1;nee_tel;Evitar el uso de dobles sentidos, ironías o metáforas.
+1;nee_tel;Evitar que copie los enunciados, información escrita (pizarra, libro de texto…).
+1;nee_tel;Seleccionar y reducir las tareas que se encomiendan.
+1;nee_tel;Comprobar que entiende el material que se presenta por escrito.
+2;nee_tel;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;nee_tel;Interactividad: Utilizar herramientas tecnológicas, simulaciones o aplicaciones interactivas que permitan al estudiante interactuar activamente con la información.
+2;nee_tel;Formatos múltiples: Proporcionar texto, audio y video para el mismo contenido.
+2;nee_tel;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones.
+3;nee_tel;Reducir la cantidad de libros de lectura obligatorios.
+3;nee_tel;Indicar libros de texto que se utilizarán.
+3;nee_tel;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;nee_tel;Indicar material de refuerzo.
+4;nee_tel;Ubicar al alumno/a con TEL cerca de los centros de interés, en un lugar donde mantenga contacto ocular continuo con el profesor y le permita contemplar toda el aula.
+4;nee_tel;Propiciar el trabajo en equipo dentro de clase para que haya una interacción positiva entre el alumnado.
+4;nee_tel;Adaptar los tiempos de trabajo / descanso dentro del aula.
+4;nee_tel;Combinar agrupamientos en función de la tarea (individual, por parejas, pequeño grupo, gran grupo).
+4;nee_tel;Trabajar en parejas para facilitar el intercambio de ideas.
+5;nee_tel;Realizar pruebas orales, si es necesario, para completar las pruebas escritas.
+5;nee_tel;Resaltar las palabras clave en las preguntas de examen.
+5;nee_tel;Priorizar en las pruebas las preguntas de tipo test, relaciones, mapas conceptuales o desarrollo de preguntas cortas.
+5;nee_tel;No penalizar las faltas de ortografía, pero corregirlas.
+5;nee_tel;Reducir el número de preguntas en las pruebas de evaluación.
+5;nee_tel;Ampliar el tiempo de realización de las pruebas, en caso necesario.
+5;nee_tel;Comprobar que ha entendido el enunciado de lo que se le pregunta en las pruebas escritas.
+1;nee_disfemia;Crear un entorno inclusivo que favorezca la confianza y reduzca la ansiedad en contextos orales.
+1;nee_disfemia;Facilitar que las exposiciones, en caso de tener que realizarlas, sean cortas y previamente consensuadas.
+1;nee_disfemia;Indicarle previamente si se va a hacer una lectura en voz alta, para que se la prepare adecuadamente.
+1;nee_disfemia;Ofrecerle un espacio de comunicación respetuoso, dándole el tiempo necesario para expresarse y evitando interrupciones.
+2;nee_disfemia;Interactividad: Utilizar herramientas tecnológicas, simulaciones o aplicaciones interactivas que permitan al estudiante interactuar activamente con la información.
+2;nee_disfemia;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;nee_disfemia;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones.
+2;nee_disfemia;Formatos múltiples: Proporcionar texto, audio y video para el mismo contenido.
+3;nee_disfemia;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;nee_disfemia;Indicar libros de texto que se utilizarán.
+3;nee_disfemia;Indicar material de refuerzo.
+4;nee_disfemia;Ubicar al alumno/a cerca de los centros de interés: la pizarra y el docente.
+4;nee_disfemia;Adaptar los tiempos de trabajo y explicación / descanso dentro del aula.
+4;nee_disfemia;Combinar agrupamientos en función de la tarea (individual, por parejas, pequeño grupo, gran grupo).
+4;nee_disfemia;Propiciar el trabajo en equipo dentro de clase para permitir la comunicación e interacción con los compañeros/as de forma positiva.
+4;nee_disfemia;Trabajar en parejas para facilitar el feedback entre compañeros/as.
+4;nee_disfemia;Establecer reglas y roles del alumnado en los distintos agrupamientos.
+5;nee_disfemia;Ampliar el tiempo de realización de las pruebas, en caso necesario.
+5;nee_disfemia;Buscar momentos en que pueda hacer la exposición oral con el profesor/a.
+5;nee_disfemia;Procurar que las exposiciones orales no se hagan delante de los compañeros/as, para evitar situaciones de vergüenza.
+5;nee_disfemia;Priorizar la escritura y la escucha sobre la conversación en segundo idioma.
+1;nee_sensorial;Auditiva: Acompañar las consignas orales de instrucciones escritas o visuales y organizar los turnos de intervención.
+1;nee_sensorial;Visual: Adaptar las actividades con información visual mediante descripciones, elementos táctiles o formatos accesibles.
+1;nee_sensorial;Motora: Adaptar la manipulación, la escritura y la ejecución de tareas mediante productos de apoyo o formas alternativas de participación.
+2;nee_sensorial;Uso de sistemas FM/emisora en el aula y subtitulado de material audiovisual.
+2;nee_sensorial;Adaptación del formato del texto (macrotipos, alto contraste) o soporte auditivo/digital.
+3;nee_sensorial;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;nee_sensorial;Visual: Utilizar materiales táctiles, ayudas ópticas, ampliadores o lectores de pantalla, según las orientaciones especializadas.
+3;nee_sensorial;Auditiva: Utilizar materiales audiovisuales accesibles y sistemas de micrófono remoto o ayudas auditivas cuando estén indicados.
+3;nee_sensorial;Motora: Utilizar útiles de escritura, soportes, teclados, ratones u otros dispositivos adaptados a sus posibilidades de manejo.
+4;nee_sensorial;Ubicación en primera fila orientada al docente para facilitar la lectura labiofacial/visión óptima.
+5;nee_sensorial;Presentar las pruebas en un formato accesible y permitir los productos de apoyo y sistemas de comunicación que precise.
+5;nee_sensorial;Permitir respuestas escritas, orales, digitales o mediante su sistema de comunicación, según la barrera de acceso y el aprendizaje evaluado.
+5;nee_sensorial;Ampliar el tiempo o distribuir la prueba en sesiones cuando las necesidades de acceso, ejecución o fatiga lo requieran.
+1;tdah;Alternar actividades que requieren alta concentración con tareas más manipulativas o dinámicas.
+1;tdah;Fraccionar las tareas en secuencias cortas con pasos intermedios definidos.
+1;tdah;Proporcionar enunciados de tareas concisos, resaltando las palabras clave en negrita.
+2;tdah;Combinar la explicación verbal con apoyo visual constante en pizarra o pantalla.
+2;tdah;Asegurar el contacto visual directo y realizar comprobaciones periódicas de comprensión.
+3;tdah;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;tdah;Uso de listas de chequeo (checklists) para revisión del material e itinerario de clase.
+3;tdah;Organizadores gráficos de tareas, temporizador/cronómetro visual para autogestión del tiempo.
+4;tdah;Flexibilidad en la gestión del tiempo permitiendo descansos activos breves organizados.
+4;tdah;Ubicación en las primeras filas, cerca de la mesa del profesor/a y alejado de distractores (ventanas/puertas).
+5;tdah;Supervisión del docente al inicio y durante el examen para asegurar que ha comprendido las preguntas.
+5;tdah;Exámenes fraccionados en dos partes o realizables en diferentes momentos si es necesario.
+1;dea_lectura;Simplificación sintáctica de enunciados complejos y apoyos gráficos explicativos.
+1;dea_lectura;Priorizar tareas de respuesta corta, selección múltiple o esquemas sobre amplios desarrollos redactados.
+2;dea_lectura;Formatos múltiples: Proporcionar texto, audio y video para el mismo contenido.
+2;dea_lectura;Lectura en voz alta de enunciados e instrucciones por parte del docente o un compañero.
+2;dea_lectura;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones.
+2;dea_lectura;Opciones de formato: Presentar la misma información en diferentes formatos, como texto digital, o impreso.
+2;dea_lectura;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;dea_lectura;Interactividad: Utilizar herramientas tecnológicas, simulaciones o aplicaciones interactivas que permitan al estudiante interactuar activamente con la información.
+2;dea_lectura;Uso de fuentes tipográficas claras de fácil lectura (Arial/Calibri), tamaño ampliado (12-14pt) y interlineado holgado.
+3;dea_lectura;Uso de regla o guía de lectura, marcapáginas y programas de lectura por síntesis de voz.
+3;dea_lectura;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+4;dea_lectura;Concesión de tiempo adicional (hasta un 25-50% más) en la realización de lecturas y exámenes.
+4;dea_lectura;Incorporar trabajo por parejas o en pequeños grupos para favorecer el intercambio de ideas y el apoyo entre iguales.
+5;dea_lectura;Lectura individualizada de los enunciados del examen por parte del docente antes de comenzar.
+5;dea_lectura;Valorar el cuidado y orden del material, presentación de cuadernos, esfuerzo y trabajo cotidiano.
+5;dea_lectura;Comprobar que ha entendido el enunciado de lo que se le pregunta en las pruebas escritas.
+5;dea_lectura;Utilizar diversos instrumentos de evaluación: pruebas, cuaderno del profesor, observación directa, portfolio, rúbricas.
+5;dea_lectura;No penalizar las faltas de ortografía, corregirlas.
+5;dea_lectura;Posibilidad de realizar pruebas orales o con soporte digital en sustitución de pruebas escritas.
+1;dea_escritura;Permitir respuestas esquemáticas o en formato digital para reducir la fatiga en la copia.
+1;dea_escritura;Proporcionar plantillas con estructura de respuesta guiada o mapas conceptuales semirellenos.
+2;dea_escritura;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;dea_escritura;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones para quienes procesan mejor la información auditiva.
+2;dea_escritura;Interactividad: Utilizar herramientas tecnológicas, simulaciones o aplicaciones interactivas que permitan al estudiante interactuar activamente con la información.
+2;dea_escritura;Facilitar apuntes, esquemas e infografías previamente elaborados o digitalizados.
+3;dea_escritura;Facilitar herramientas de dictado por voz cuando la escritura manual dificulte expresar los conocimientos.
+3;dea_escritura;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;dea_escritura;Utilizar papel pautado, referencias visuales para márgenes y espacios y útiles de escritura adaptados cuando faciliten el trazado.
+4;dea_escritura;Ubicación con un/a compañero/a tutor/a que colabore en la verificación de copia de tareas de la pizarra.
+5;dea_escritura;No penalización cuantitativa de las faltas de ortografía o grafía derivada de la dificultad específica.
+5;dea_escritura;Permitir formato tipo test, preguntas de completar o de unir con flechas.
+1;dea_calculo;Uso de problemas contextualizados apoyados en material visual o situaciones cotidianas.
+1;dea_calculo;Descomposición de procedimientos matemáticos complejos en guía paso a paso.
+2;dea_calculo;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones para quienes procesan mejor la información auditiva.
+2;dea_calculo;Interactividad: Utilizar herramientas tecnológicas, simulaciones o aplicaciones interactivas que permitan al estudiante interactuar activamente con la información.
+2;dea_calculo;Explicar explícitamente el vocabulario y los símbolos matemáticos, relacionándolos con ejemplos concretos y representaciones visuales.
+2;dea_calculo;Presentar los problemas con enunciados claros y datos organizados, comprobando que identifica qué información tiene y qué debe averiguar.
+2;dea_calculo;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;dea_calculo;Formatos múltiples: Proporcionar texto, audio y video para el mismo contenido.
+3;dea_calculo;Materiales manipulativos (bloques multibase, rectas numéricas, plantillas de organización gráfica de operaciones).
+3;dea_calculo;Permitir el uso continuo de tabla pitagórica, tablas de fórmulas y calculadora básica.
+3;dea_calculo;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+4;dea_calculo;Ajustar el tiempo de resolución y la cantidad de ejercicios, evitando que la rapidez sea la principal exigencia.
+4;dea_calculo;Incorporar trabajo guiado por parejas o en pequeños grupos para explicar y contrastar estrategias de resolución.
+5;dea_calculo;Permitir el uso de calculadora o tablas de apoyo en exámenes donde el objetivo no sea el cálculo mecánico.
+5;dea_calculo;Recoger evidencias del procedimiento y del razonamiento mediante explicaciones orales, escritas o manipulativas, diferenciándolas del resultado del cálculo.
+1;dia_cil;Fragmentar la tarea en trozos más comprensibles.
+1;dia_cil;Proponer tareas de las más simples a las más complejas.
+1;dia_cil;Simplificar las instrucciones que se le dan por escrito subrayando o destacando lo más relevante.
+1;dia_cil;Seleccionar y reducir las tareas que se encomiendan.
+1;dia_cil;Corregir de inmediato e informar sobre los resultados del aprendizaje.
+1;dia_cil;Dar una instrucción cada vez.
+1;dia_cil;Reforzar verbalmente de forma positiva ante los logros.
+2;dia_cil;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;dia_cil;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones para quienes procesan mejor la información auditiva.
+2;dia_cil;Texto accesible: Utilizar textos adaptados, con un lenguaje claro y directo.
+3;dia_cil;Indicar material de refuerzo.
+3;dia_cil;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;dia_cil;Reducir la cantidad de libros de lectura obligatorios.
+3;dia_cil;Indicar libros de texto que se utilizarán.
+4;dia_cil;Trabajar en parejas para facilitar el feedback entre compañeros/as.
+4;dia_cil;Establecer reglas y roles del alumnado en los distintos agrupamientos.
+4;dia_cil;Crear espacios diferenciados y cómodos para el trabajo en equipo.
+4;dia_cil;Propiciar el trabajo en equipo dentro de clase para permitir la comunicación e interacción con los compañeros/as de forma positiva.
+4;dia_cil;Ubicar al alumno/a cerca de los centros de interés: la pizarra y el docente.
+4;dia_cil;Combinar agrupamientos en función de la tarea (individual, por parejas, pequeño grupo, gran grupo).
+4;dia_cil;Adaptar los tiempos de trabajo y explicación / descanso dentro del aula.
+5;dia_cil;Comprobar que ha entendido el enunciado de lo que se le pregunta en las pruebas escritas.
+5;dia_cil;Ampliar el tiempo de realización de las pruebas escritas para facilitar la autocorrección.
+5;dia_cil;Orientarle en los exámenes cuando tenga dificultades en alguna pregunta en la que se bloquee.
+5;dia_cil;Reducir el número de preguntas en las pruebas de evaluación.
+5;dia_cil;Cambiar el formato del examen escrito (enunciados cortos, destacar palabras clave de los enunciados).
+1;ecophe;Trabajar el vocabulario específico de la materia.
+1;ecophe;Actividades con glosarios terminológicos bilingües/de apoyo y vocabulario clave priorizado.
+2;ecophe;Uso de traductores digitales, diccionarios visuales e ilustraciones explicativas de contexto.
+2;ecophe;Texto accesible: Utilizar textos adaptados, con un lenguaje claro y directo.
+2;ecophe;Interactividad: Utilizar herramientas tecnológicas, simulaciones o aplicaciones interactivas que permitan al estudiante interactuar activamente con la información.
+2;ecophe;Representación visual: Utilizar gráficos, diagramas, videos, esquemas o mapas conceptuales que ayuden a visualizar conceptos complejos.
+2;ecophe;Representación auditiva: Proporcionar información a través de audios, podcasts, lecturas en voz alta o narraciones para quienes procesan mejor la información auditiva.
+3;ecophe;Utilizar una agenda para organizar tareas y facilitar el seguimiento con la familia.
+3;ecophe;Facilitar materiales de refuerzo graduados y recursos de consulta adecuados a su competencia curricular.
+3;ecophe;Garantizar alternativas impresas y tiempo de uso de los recursos del centro cuando existan dificultades de acceso a dispositivos, conexión o materiales en casa.
+4;ecophe;Utilizar agrupamientos flexibles y temporales para reforzar aprendizajes concretos, combinándolos con la participación en el grupo de referencia.
+4;ecophe;Favorecer la tutoría entre iguales y el trabajo cooperativo con funciones claras.
+5;ecophe;Utilizar tareas prácticas, producciones de aula, observación sistemática y pruebas para recoger evidencias de los criterios evaluados.
+5;ecophe;Cuando exista una barrera lingüística, permitir apoyos visuales y formas complementarias de respuesta para valorar el aprendizaje de la materia, diferenciándolo del dominio del español cuando este no sea el objeto de evaluación.
+5;ecophe;Utilizar diversos instrumentos de evaluación: pruebas, cuaderno del profesor, observación directa, portfolio, rúbricas.
+1;alcain;Diseño de proyectos de transferencia interdisciplinar y síntesis creativa.
+1;alcain;Proponer actividades de profundización, investigación abierta y retos de pensamiento crítico.
+3;alcain;Plataformas de aprendizaje avanzado, lecturas complejas, laboratorios virtuales y kits de ampliación.
+4;alcain;Agrupamientos flexibles: trabajo autónomo de investigación y roles de liderazgo en proyectos cooperativos.
+5;alcain;Evaluación mediante rúbricas de producto final, proyectos, autoevaluación y coevaluación exigentemente guiada.</script>
 <script>
 /* ===== [JS-1] CONFIGURACIÓN (valores fijos que se pueden cambiar aquí) ===== */
 const LOCALIDAD='Jaén';
-const VERSION='1.04',FECHA_VERSION='2026-10-26';
+const VERSION='1.05',FECHA_VERSION='2026-10-31';
 const EMAIL='scrugar909@g.educaand.es';
+const TXT_FIRMAS='(Texto pendiente de definir por el centro.)'; // [JS-1a] texto del "Circuito de firmas" del aviso previo al PDF
 const MSG_INCOMP='"Dificultades en la materia (no NEAE)" y las categorías NEAE son incompatibles. Desmarca una de ellas antes de marcar la otra.'; // subir en cada entrega
 const GRUPOS_ESO=['A','B','C'],SIN_PEND=['1º ESO','1º Bachillerato'];
 const MSG_PEND='Un alumno/a de 1º ESO o de 1º de Bachillerato no puede tener materias pendientes.';
@@ -249,18 +412,23 @@ const APARTADOS=['','Tipos de actividades y tareas','Formas de acceso a la infor
 
 /* ===== [JS-2] TIPOLOGÍAS: [código (igual que en medidas.csv), grupo, etiqueta, casilla del modelo] ===== */
 const TIPOS=[
- ['repetidor','a','Repetidor/a (no promociona)','rep'],
- ['pendientes','a','Pendientes','pen'],
- ['general','a','Dificultades en la materia (no NEAE)','dif'],
- ['nee_intelectual','nee','Discapacidad intelectual','nee'],
- ['nee_tea','nee','TEA','nee'],
- ['nee_sensorial','nee','Sensorial / Motor','nee'],
- ['tdah','dia','TDAH','dia'],
- ['dea_lectura','dia','DIA · Lectura / Dislexia','dia'],
- ['dea_escritura','dia','DIA · Escritura / Disgrafía','dia'],
- ['dea_calculo','dia','DIA · Cálculo / Discalculia','dia'],
- ['ecophe','comp','Condiciones Personales e Historial Escolar / Incorporación Tardía','comp'],
- ['alcain','prof','Programa de Profundización','prof']];
+ ['repetidor','a','Repetidor/a (no promociona)','rep',''],
+ ['pendientes','a','Pendientes','pen',''],
+ ['general','a','Dificultades en la materia (no NEAE)','dif',''],
+ ['nee_intelectual','nee','Discapacidad intelectual','nee',''],
+ ['nee_tea','nee','TEA','nee','Trastorno del Espectro Autista'],
+ ['nee_sensorial','nee','Sensorial / Motor','nee',''],
+ ['nee_tel','nee','TEL','nee','Trastorno Específico del Lenguaje'],
+ ['nee_disfemia','nee','Disfemia','nee','Disfemia (tartamudez)'],
+ ['tdah','dia','TDAH','dia','Trastorno por Déficit de Atención e Hiperactividad'],
+ ['dea_lectura','dia','DIA · Lectura / Dislexia','dia','Dificultades de Aprendizaje: dificultad específica en la lectura (dislexia)'],
+ ['dea_escritura','dia','DIA · Escritura / Disgrafía','dia','Dificultades de Aprendizaje: dificultad específica en la escritura (disgrafía)'],
+ ['dea_calculo','dia','DIA · Cálculo / Discalculia','dia','Dificultades de Aprendizaje: dificultad específica en el cálculo (discalculia)'],
+ ['dia_cil','dia','DIA · Capacidad Intelectual Límite','dia','Dificultades de Aprendizaje: capacidad intelectual límite'],
+ ['ecophe','comp','Condiciones Personales e Historial Escolar / Incorporación Tardía','comp',''],
+ ['alcain','prof','Programa de Profundización','prof','']];
+const CORTO={repetidor:'Repetidor/a',pendientes:'Pendientes',general:'Dificultades',nee_intelectual:'Discap. intelectual',nee_tea:'TEA',nee_sensorial:'Sensorial/Motor',nee_tel:'TEL',nee_disfemia:'Disfemia',tdah:'TDAH',dea_lectura:'Lectura',dea_escritura:'Escritura',dea_calculo:'Cálculo',dia_cil:'CIL',ecophe:'Compensación',alcain:'Profundización'}; // nombres cortos para "Comunes a varias tipologías"
+const tip=t=>t[4]?` data-tip="${t[4]}"`:'';   // etiqueta con el nombre completo (CSS [CSS-1g])
 
 /* ===== [JS-3] UTILIDADES ===== */
 const $=s=>document.querySelector(s);
@@ -288,21 +456,23 @@ async function cargarMedidas(){
   try{const r=await fetch('medidas.csv?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;MED=parseCSV(await r.text())}
   catch(e){MED=parseCSV($('#csv').textContent)}   // sin servidor: copia interna
 }
-const recomendadas=()=>MED.filter(m=>S.tipos.includes(m.t)).map(m=>m.k)
-  .concat(Object.entries(S.extra).flatMap(([n,a])=>a.map(x=>k(n,x))));
+const recomendadas=()=>[...new Set(MED.filter(m=>S.tipos.includes(m.t)).map(m=>m.k)
+  .concat(Object.entries(S.extra).flatMap(([n,a])=>a.map(x=>k(n,x)))))];
+const uniq=a=>{const v=new Set();return a.filter(m=>!v.has(m.k)&&v.add(m.k))};   // [JS-4a] una sola vez cada medida (clave apartado|texto)
+const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();    // para el buscador: sin tildes ni mayúsculas
 
 /* ===== [JS-5] ESTADO ===== */
 const nuevo=()=>({nombre:'',curso:'',grupo:'',tutor:'',dpto:'',prof:'',materia:'',tipos:[],pend:[],
   rini:hoy(),rfin:FIN_POR_DEFECTO,pini:hoy(),pfin:FIN_POR_DEFECTO,comp:TXT_CURRICULAR,crit:TXT_CURRICULAR,sab:TXT_CURRICULAR,
   obs:'',fecha:hoy(),sel:[],extra:{1:[],2:[],3:[],4:[],5:[]}});
-let S=nuevo(),sucio=false,ABR={},SUG={t:[],a:'',x:''};
+let S=nuevo(),sucio=false,ABR={},BUS={},SUG={t:[],a:'',x:''};
 const guardaDocente=()=>{try{localStorage.setItem('pra_docente',JSON.stringify({dpto:S.dpto,prof:S.prof,materia:S.materia}))}catch(e){}};
 
 /* ===== [JS-6] INTERFAZ ===== */
 function volcar(){document.querySelectorAll('[data-k]').forEach(e=>e.value=S[e.dataset.k]??'')} // estado -> campos
 function pintaTipos(){ // [JS-6a] botones por grupo (a, nee, dia, comp, prof)
   ['a','nee','dia','comp','prof'].forEach(g=>$('#g-'+g).innerHTML=TIPOS.filter(t=>t[1]==g).map(t=>
-    `<button class="c ${S.tipos.includes(t[0])?'on':''}" data-t="${t[0]}">${t[2]}</button>`).join(''));
+    `<button class="c ${S.tipos.includes(t[0])?'on':''}" data-t="${t[0]}"${tip(t)}>${t[2]}</button>`).join(''));
 }
 function fechasVis(){$('#fpro').hidden=!tiene('prof')} // fechas de profundización solo si se marca su botón
 function pintaGrupo(){ // [JS-6d] los grupos dependen del curso (ESO: A-C; Bachillerato: A-F)
@@ -319,18 +489,37 @@ function pintaPend(){ // [JS-6b] materias pendientes (una o varias) de cursos an
    +(S.pend.length<ops.length?'<button class="s" data-pa="1">+ añadir otra</button>':'');
 }
 function pintaMedidas(){ // [JS-6c] los 5 apartados, cada uno en su rectángulo (colores alternos)
-  const li=(key,x,o)=>`<label class="m ${o?'o':''}"><input type="checkbox" data-k2="${esc(key)}" ${S.sel.includes(key)?'checked':''}>${esc(x)}</label>`;
+  const li=(key,x,o,ex)=>`<label class="m ${o?'ot':''}" data-s="${esc(norm(x))}"><input type="checkbox" data-k2="${esc(key)}" ${S.sel.includes(key)?'checked':''}><span>${esc(x)}${ex?` <small>(${esc(ex)})</small>`:''}</span></label>`;
+  const nom=c=>(TIPOS.find(t=>t[0]==c)||[0,0,c])[2];
+  const ord=[...new Set([...TIPOS.map(t=>t[0]),...MED.map(m=>m.t)])];     // orden de los botones; las tipologías desconocidas van al final
+  const tk={};MED.forEach(m=>{const a=tk[m.k]=tk[m.k]||[];if(!a.includes(m.t))a.push(m.t)}); // tipologías de cada medida
+  const grp=(id,cl,tit,arr,ex)=>`<details class="gr ${cl}" data-dg="${id}" ${ABR[id]?'open':''}><summary>${esc(tit)} (<span class="cn" data-n="${arr.length}">${arr.length}</span>)</summary>${arr.map(m=>li(m.k,m.x,1,ex?tk[m.k].map(c=>CORTO[c]||c).join(', '):'')).join('')}</details>`;
   $('#meds').innerHTML=[1,2,3,4,5].map(n=>{
-    const l=MED.filter(m=>m.a==n),rec=l.filter(m=>S.tipos.includes(m.t)||S.sel.includes(m.k)),oth=l.filter(m=>!S.tipos.includes(m.t)&&!S.sel.includes(m.k));
+    const l=uniq(MED.filter(m=>m.a==n)),rec=l.filter(m=>tk[m.k].some(t=>S.tipos.includes(t))||S.sel.includes(m.k)),oth=l.filter(m=>!rec.includes(m));
+    const com=oth.filter(m=>tk[m.k].length>1),gs=ord.map(c=>[c,oth.filter(m=>tk[m.k].length==1&&tk[m.k][0]==c)]).filter(g=>g[1].length);
     return `<div class="mk mk${n%2?1:2}"><div class="mh"><b>${n}. ${APARTADOS[n]}</b><button class="ic" data-cp="${n}" aria-label="Copiar para Séneca" title="Copiar para Séneca">${ICON_COPY}</button></div>`
-     +rec.map(m=>li(m.k,m.x)).join('')+S.extra[n].map(x=>li(k(n,x),x)).join('')
-     +`<details data-dn="${n}" ${ABR[n]?'open':''}><summary>Otras medidas (${oth.length})</summary>${oth.map(m=>li(m.k,m.x,1)).join('')}</details>`
+     +rec.map(m=>li(m.k,m.x)).join('')+S.extra[n].filter(x=>!l.some(m=>m.k==k(n,x))).map(x=>li(k(n,x),x)).join('')
+     +`<details data-dn="${n}" ${ABR[n]?'open':''}><summary>Otras medidas (${oth.length})</summary><input class="bq" type="search" data-q="${n}" placeholder="Buscar en otras medidas…" aria-label="Buscar en otras medidas" value="${esc(BUS[n]||'')}">`
+     +(com.length?grp('g'+n+'|comunes','gc','Comunes a varias tipologías',com,true):'')
+     +gs.map((g,j)=>grp('g'+n+'|'+g[0],'g'+(j%2+1),nom(g[0]),g[1])).join('')
+     +`<p class="nr" hidden>Ninguna medida coincide con la búsqueda.</p></details>`
      +`<details class="ad"><summary>+ medida propia</summary><div class="ad2"><input id="x${n}" placeholder="Escribe la medida"><button class="s" data-add="${n}">Añadir</button></div></details></div>`}).join('');
+  [1,2,3,4,5].forEach(filtra);
+}
+function filtra(n){ // [JS-6e] buscador de "Otras medidas": oculta lo que no coincide y abre los grupos con resultados
+  const d=document.querySelector(`details[data-dn="${n}"]`);if(!d)return;
+  const q=norm((BUS[n]||'').trim());let tot=0;
+  d.querySelectorAll('.gr').forEach(g=>{let v=0;
+    g.querySelectorAll('label.m').forEach(l=>{const s=!q||l.dataset.s.includes(q);l.hidden=!s;if(s)v++});
+    g.hidden=!v;tot+=v;const c=g.querySelector('.cn');c.textContent=q?v:c.dataset.n;
+    g.open=q?true:!!ABR[g.dataset.dg]});
+  d.querySelector('.nr').hidden=!(q&&!tot);
 }
 function todo(){pintaGrupo();volcar();pintaTipos();pintaPend();pintaMedidas();fechasVis()}
 
 /* ===== [JS-7] COPIAR PARA SÉNECA ===== */
-const lista=n=>MED.filter(m=>m.a==n&&S.sel.includes(m.k)).map(m=>m.x).concat(S.extra[n].filter(x=>S.sel.includes(k(n,x))));
+const lista=n=>{const v=new Set(),o=[];  // cada medida una sola vez, aunque esté en varias tipologías
+  [...MED.filter(m=>m.a==n).map(m=>[m.k,m.x]),...S.extra[n].map(x=>[k(n,x),x])].forEach(([key,x])=>{if(S.sel.includes(key)&&!v.has(key)){v.add(key);o.push(x)}});return o};
 const texto=n=>lista(n).map(x=>'• '+x).join('\n');
 
 /* ===== [JS-8] DOCUMENTO PDF (se rellena al imprimir) ===== */
@@ -373,6 +562,9 @@ async function pdf(){ // valida, pone el nombre de archivo (= título) e imprime
   if(tiene('prof')&&S.pfin<S.pini)adv.push('La fecha de fin de la profundización es anterior a la de inicio.');
   [1,2,3,4,5].filter(n=>!lista(n).length).forEach(n=>adv.push('El apartado "'+APARTADOS[n]+'" no tiene ninguna medida.'));
   if(adv.length&&!confirm(adv.join('\n')+'\n\n¿Generar el PDF igualmente?'))return;
+  $('#gf').textContent=TXT_FIRMAS;$('#gd').showModal();   // [JS-8a] aviso de gestión documental: el PDF solo se genera al aceptar
+}
+async function generaPDF(){
   const t=document.title;
   document.title=nombreArchivo();
   renderDoc();await Promise.all([...document.images].map(i=>i.decode().catch(()=>{})));print();document.title=t;sucio=false;
@@ -416,6 +608,9 @@ function otro(){ // conserva datos del profesor/a, materia y textos curriculares
       S.tipos.push(c)}else S.tipos.splice(i,1);
     S.sel=recomendadas();pintaTipos();pintaPend();pintaMedidas();fechasVis()};
   $('#meds').onchange=e=>{const x=e.target.dataset.k2;if(x){S.sel=e.target.checked?[...S.sel,x]:S.sel.filter(y=>y!=x);pintaMedidas()}};
+  $('#gdc').onclick=()=>$('#gd').close();$('#gda').onclick=()=>{$('#gd').close();generaPDF()};
+  $('#meds').oninput=e=>{const n=e.target.dataset.q;if(n){BUS[n]=e.target.value;filtra(n)}};
+  $('#meds').addEventListener('click',e=>{const s=e.target.closest('summary'),d=s&&s.parentElement;if(d&&d.dataset.dg)ABR[d.dataset.dg]=!d.open},true); // recuerda los grupos plegados/abiertos (antes de que el navegador cambie su estado)
   $('#meds').onclick=e=>{const b=e.target.closest('[data-add],[data-cp]');if(!b)return;const a=b.dataset.add,c=b.dataset.cp;
     if(a){const v=$('#x'+a).value.trim();if(v){S.extra[a].push(v);S.sel.push(k(a,v));pintaMedidas()}}
     else navigator.clipboard.writeText(texto(c)).then(()=>{b.innerHTML=ICON_OK;setTimeout(()=>b.innerHTML=ICON_COPY,1500)})};
@@ -427,7 +622,7 @@ function otro(){ // conserva datos del profesor/a, materia y textos curriculares
   $('#meds').addEventListener('toggle',e=>{const n=e.target.dataset.dn;if(n)ABR[n]=e.target.open},true); // recuerda qué desplegables están abiertos
   /* [JS-10] Sugerencia de medida (correo) y aviso al cerrar con datos sin guardar */
   const GT={a:'Alumnado con',nee:'NEAE · NEE',dia:'NEAE · Dificultades de aprendizaje (DIA)',comp:'NEAE · Compensación educativa',prof:'Programa de profundización'};
-  const pintaSug=()=>{$('#sg').innerHTML=Object.keys(GT).map(g=>`<p class="l">${GT[g]}</p><div class="r">${TIPOS.filter(t=>t[1]==g).map(t=>`<button class="c ${SUG.t.includes(t[0])?'on':''}" data-st="${t[0]}">${t[2]}</button>`).join('')}</div>`).join('');
+  const pintaSug=()=>{$('#sg').innerHTML=Object.keys(GT).map(g=>`<p class="l">${GT[g]}</p><div class="r">${TIPOS.filter(t=>t[1]==g).map(t=>`<button class="c ${SUG.t.includes(t[0])?'on':''}" data-st="${t[0]}"${tip(t)}>${t[2]}</button>`).join('')}</div>`).join('');
     const ok=SUG.t.length&&SUG.a&&SUG.x.trim();['sgm','sgl','sgc'].forEach(i=>$('#'+i).disabled=!ok)};
   const mensaje=()=>{const x=SUG.x.trim();return{asunto:'Sugerencia fija de medida de atención',cuerpo:`Tipología(s): ${SUG.t.map(c=>TIPOS.find(t=>t[0]==c)[2]).join(' · ')}\nTipo de medida: ${SUG.a}. ${APARTADOS[SUG.a]}\nMedida propuesta: ${x}\n\nFila(s) para medidas.csv:\n${SUG.t.map(c=>`${SUG.a};${c};${x.replace(/;/g,',')}`).join('\n')}\n`}};
   $('#bsug').onclick=()=>{SUG={t:[...S.tipos],a:'',x:''};$('#sa').value='';$('#sx').value='';pintaSug();$('#sug').showModal()};
@@ -438,7 +633,7 @@ function otro(){ // conserva datos del profesor/a, materia y textos curriculares
   $('#sgl').onclick=()=>{const m=mensaje();location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent(m.asunto)+'&body='+encodeURIComponent(m.cuerpo)};
   $('#sgc').onclick=()=>{const m=mensaje();navigator.clipboard.writeText('Para: '+EMAIL+'\nAsunto: '+m.asunto+'\n\n'+m.cuerpo).then(()=>alert('Texto copiado. Pégalo en un correo a '+EMAIL))};
   $('#sgx').onclick=()=>$('#sug').close();
-  document.addEventListener('input',e=>{if(!e.target.closest('#sug'))sucio=true});
+  document.addEventListener('input',e=>{if(!e.target.closest('#sug')&&!e.target.dataset.q)sucio=true});
   document.addEventListener('click',e=>{if(e.target.closest('#s3,#meds'))sucio=true});
   addEventListener('beforeunload',e=>{if(sucio){e.preventDefault();e.returnValue=''}});
 })();
