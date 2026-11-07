@@ -101,6 +101,11 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 #ac-bienvenida{text-align:left}#ac-bienvenida h2{font-size:20px}
 #gbtn{display:flex;justify-content:center;margin:14px 0 8px;min-height:44px}
 .hint{font-size:12.5px;color:#555;margin:0 0 6px}
+/* ===== [CSS-1i] AYUDA (v1.08) ===== */
+.lkb{display:block;border:1px solid var(--p);border-radius:8px;padding:9px 12px;margin:8px 0;text-decoration:none;color:#222;background:#fff}
+.lkb:hover{background:var(--pl)}.lkb b{display:block;color:var(--pd);font-size:14px}.lkb span{display:block;font-size:12.5px;color:#555;margin-top:2px}
+#ayuda{max-width:420px;width:92vw}#gd a{color:var(--pd)}
+.ir{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}.ir form{margin:0}.ir .ok{margin:0}
 /* ===== [CSS-2] DOCUMENTO PDF (réplica del modelo oficial Anexo VIII) ===== */
 #doc{display:none}
 @page{size:A4;margin:12mm 12mm 16mm;
@@ -126,7 +131,7 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <body>
 <!-- ===== [HTML-1] CABECERA ===== -->
 <header><img id="logo" alt="Escudo del IES Fuente de la Peña"><div class="hm"><h1>Programas de Refuerzo y Profundización · IES Fuente de la Peña</h1>
-<div class="tb" id="tb" hidden><button onclick="pdf()">Generar PDF</button><button onclick="otro()">Nuevo alumno</button><button onclick="guardar()">Guardar borrador</button><button onclick="$('#fjson').click()">Cargar borrador</button><button onclick="salir()">Cerrar sesión</button></div></div>
+<div class="tb" id="tb" hidden><button onclick="pdf()">Generar PDF</button><button onclick="abrirAyuda()">Ayuda</button><button onclick="otro()">Nuevo alumno</button><button onclick="guardar()">Guardar borrador</button><button onclick="$('#fjson').click()">Cargar borrador</button><button onclick="salir()">Cerrar sesión</button></div></div>
 <button class="ib" onclick="$('#info').showModal()" aria-label="Información" title="Información"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".6" fill="currentColor"/></svg></button>
 <input type="file" id="fjson" accept=".json" hidden></header>
 <dialog id="info"><h3>Información</h3>
@@ -134,7 +139,12 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <p>Realizado por Santiago Cruz García en colaboración con el Departamento de Orientación del IES Fuente de la Peña de Jaén, adaptando una idea del profesor Rafael Cabrera del IES Marqués de Comares de Lucena.</p>
 <p>Esta web app no guarda datos personales del alumnado en ningún servidor: todo se procesa en tu navegador. Solo se guarda algo en local al generar un PDF o al guardar el borrador y, a partir de ahí, su uso depende de ti, como cualquier otro documento.</p>
 <p>Cualquier sugerencia, mejora o medida de atención a la diversidad que quieras que aparezca de forma fija en la aplicación puedes hacérnosla llegar a <a href="mailto:scrugar909@g.educaand.es">scrugar909@g.educaand.es</a>.</p>
-<form method="dialog"><button class="ok">Aceptar</button></form></dialog>
+<div class="ir"><button class="s" type="button" id="infoayuda">Ayuda</button><form method="dialog"><button class="ok">Aceptar</button></form></div></dialog>
+<!-- [HTML-9] Ventanita de ayuda: dos PDF que se abren en otra pestaña -->
+<dialog id="ayuda"><h3>Ayuda</h3><p>Elige qué quieres consultar. Se abrirá en otra pestaña.</p>
+<a class="lkb" id="a-guia" target="_blank" rel="noopener"><b>Guía rápida</b><span>Cómo rellenar el formulario</span></a>
+<a class="lkb" id="a-flujo" target="_blank" rel="noopener"><b>Flujo de trabajo</b><span>Qué hacer con el PDF: firma en Séneca y archivo</span></a>
+<div class="bar" style="justify-content:flex-end"><button class="s" type="button" id="ayc">Cerrar</button></div></dialog>
 <dialog id="sug"><h3>Sugerencia de medida de atención</h3>
 <ol><li>Selecciona la especificidad del alumnado.</li><li>Elige el tipo de medida.</li><li>Redacta la medida.</li></ol>
 <p>Puedes enviarlo al correo scrugar909@g.educaand.es copiando el resultado. Si tienes Gmail abierto, pulsa «Abrir en Gmail» y el correo sale ya redactado.</p><div id="sg"></div>
@@ -145,6 +155,7 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <dialog id="gd"><h3>GESTIÓN DOCUMENTAL DEL PROGRAMA DE REFUERZO</h3>
 <p>Se va a proceder a generar un PDF con los datos seleccionados. La gestión de la privacidad de los datos que aparecen es su responsabilidad a partir de este momento.</p>
 <h4>CIRCUITO DE FIRMAS</h4><p id="gf"></p>
+<p><a id="gflujo" target="_blank" rel="noopener">Ver el flujo de trabajo completo (se abre en otra pestaña)</a></p>
 <div class="bar"><button class="s" id="gdc">Cancelar</button><button id="gda">Aceptar y generar PDF</button></div></dialog>
 <!-- [HTML-1b] Pantallas de acceso (el resto de la app permanece oculto hasta validar la cuenta) -->
 <section id="ac-login" class="ac"><h2>Acceso restringido al profesorado del centro</h2>
@@ -155,6 +166,7 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <section id="ac-bienvenida" class="ac" hidden><h2 id="hola"></h2>
 <p>Esta web app sirve para generar un único PDF con los distintos Programas de Refuerzo del Aprendizaje (PRA).</p>
 <p>Cuando rellenes los datos del alumno y del profesorado, podrás elegir los distintos tipos de PRA según las especificidades del alumno/a, y a la derecha se te propondrán medidas de atención a la diversidad que deberás confirmar. Igualmente, podrás añadir otras existentes en la base de datos o redactar tú una propia si ninguna se ajusta a tu propuesta didáctica.</p>
+<p>Si tienes dudas sobre cómo rellenar el formulario o sobre qué hacer con el PDF una vez generado (firma en Séneca y archivo), consulta <a href="#" id="ayw">Ayuda</a>, que también tendrás siempre en la cabecera: incluye una guía rápida y el flujo de trabajo.</p>
 <p>Esta web app no guarda datos personales del alumnado en ningún servidor: todo se procesa en tu navegador. Solo se guarda en local al generar un PDF o al guardar el borrador y, a partir de ahí, el uso de los datos sensibles depende de ti, como con cualquier otro documento.</p>
 <button id="empezar">Empezar</button></section>
 <main id="app" hidden>
@@ -198,11 +210,14 @@ section{padding:8px 10px}.o{padding:8px 10px 2px}.bx{padding:6px 10px}.c{padding
 <script>
 /* ===== [JS-1] CONFIGURACIÓN (valores fijos que se pueden cambiar aquí) ===== */
 const LOCALIDAD='Jaén';
-const VERSION='1.07',FECHA_VERSION='2026-10-31';
+const VERSION='1.08',FECHA_VERSION='2026-11-07';
 const EMAIL='scrugar909@g.educaand.es';
 const CLIENT_ID='594201281818-avdkom32fm6lfp4epodtd3u0mrtnajm2.apps.googleusercontent.com';   // [JS-1b] ID de cliente de Google (no es secreto)
 const URL_SCRIPT='https://script.google.com/macros/s/AKfycby_6ZyLbOy3Z6tC3bBunMvTuh921x6QHv-TM5WXIxqThCnVDyIfLMy2j4Qg33SkkpQz/exec';   // [JS-1b] aplicación web de Apps Script que comprueba el acceso y entrega las medidas
-const TXT_FIRMAS='(Texto pendiente de definir por el centro.)'; // [JS-1a] texto del "Circuito de firmas" del aviso previo al PDF
+const TXT_FIRMAS='Programa de Refuerzo (PRA):\n1. Sube el PDF del alumno/a a las firmas de Séneca.\n2. Configura la firma del propio profesor/a y del tutor/a del curso del alumno/a, con la firma en paralelo desactivada.\n3. Se firma. El tutor/a recibe la notificación y archiva el documento en el repositorio con la etiqueta adecuada.\n\nPrograma de Profundización (PP): la gestión documental se hace en Séneca, como en cursos pasados. El PDF o los textos de esta web app pueden servir de ayuda para su confección.'; // [JS-1a] texto del "Circuito de firmas" del aviso previo al PDF
+const AYUDA_VERSION='1';   // [JS-1c] cambiar (2, 3…) al sustituir un PDF de ayuda sin sacar versión nueva: evita que el navegador muestre la copia antigua
+const PDF_FLUJO='flujo-de-trabajo.pdf',PDF_GUIA='guia-rapida.pdf';   // [JS-1c] PDF de ayuda, en la misma carpeta que index.html
+const urlAyuda=f=>f+'?v='+AYUDA_VERSION;
 const MSG_INCOMP='"Dificultades en la materia (no NEAE)" y las categorías NEAE son incompatibles. Desmarca una de ellas antes de marcar la otra.'; // subir en cada entrega
 const GRUPOS_ESO=['A','B','C'],SIN_PEND=['1º ESO','1º Bachillerato'];
 const MSG_PEND='Un alumno/a de 1º ESO o de 1º de Bachillerato no puede tener materias pendientes.';
@@ -387,6 +402,7 @@ function pantalla(n){ // login | espera | denegado | bienvenida | app
   ['login','espera','denegado','bienvenida'].forEach(p=>$('#ac-'+p).hidden=p!=n);
   $('#app').hidden=n!='app';$('#tb').hidden=n!='app';
 }
+function abrirAyuda(){$('#ayuda').showModal()}   // [JS-11a] ventanita con la guía rápida y el flujo de trabajo
 function partesNombre(d){ // "Apellido1 Apellido2, Nombre" -> nombre de pila y "Nombre Apellido1 Apellido2"
   d=String(d||'').trim();const i=d.indexOf(',');
   if(i<0)return{pila:d,completo:d};
@@ -456,6 +472,10 @@ function iniciarGoogle(n){ // espera a que cargue el servicio de Google y pinta 
     pintaTipos();pintaPend();pintaMedidas();fechasVis()};
   $('#meds').onchange=e=>{const x=e.target.dataset.k2;if(x){S.sel=e.target.checked?[...S.sel,x]:S.sel.filter(y=>y!=x);pintaMedidas()}};
   $('#empezar').onclick=entrar;$('#otra').onclick=()=>{if(window.google&&google.accounts)google.accounts.id.disableAutoSelect();pantalla('login')};
+  $('#a-guia').href=urlAyuda(PDF_GUIA);$('#a-flujo').href=urlAyuda(PDF_FLUJO);$('#gflujo').href=urlAyuda(PDF_FLUJO);
+  ['#a-guia','#a-flujo'].forEach(s=>$(s).addEventListener('click',()=>setTimeout(()=>$('#ayuda').close(),0)));
+  $('#ayc').onclick=()=>$('#ayuda').close();$('#ayw').onclick=e=>{e.preventDefault();abrirAyuda()};
+  $('#infoayuda').onclick=()=>{$('#info').close();abrirAyuda()};
   $('#gdc').onclick=()=>$('#gd').close();$('#gda').onclick=()=>{$('#gd').close();generaPDF()};
   $('#meds').oninput=e=>{const n=e.target.dataset.q;if(n){BUS[n]=e.target.value;filtra(n)}};
   $('#meds').addEventListener('click',e=>{const s=e.target.closest('summary'),d=s&&s.parentElement;if(d&&d.dataset.dg)ABR[d.dataset.dg]=!d.open},true); // recuerda los grupos plegados/abiertos (antes de que el navegador cambie su estado)
